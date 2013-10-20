@@ -1,0 +1,44 @@
+@mixin theme($color) {
+  border-color: $color;
+  background-color: rgba($color, .25);
+}
+
+@mixin eq($state) {
+  &[eq-state="#{$state}"] {
+    @content;
+  }
+}
+
+div div {
+  box-sizing: border-box;
+  border-width: 2px;
+  border-style: solid;
+  border-radius: 5px;
+
+  padding: 0 .5em;
+
+
+  @include theme(red);
+
+  @include eq('small') {
+    @include theme(green);
+  }
+
+  @include eq('medium') {
+    @include theme(orange);
+  }
+
+  @include eq('large') {
+    @include theme(blue);
+  }
+}
+
+#left {
+  width: 65%;
+  float: left;
+}
+
+#right {
+  width: 35%;
+  float: right;
+}
