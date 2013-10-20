@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "authors": [
     "Sam Richard <snugug@gmail.com>"
   ],
@@ -18,6 +18,14 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "Gemfile",
+    "Gemfile.lock",
+    "Gruntfile.js",
+    "bower.json",
+    "css",
+    "index.html",
+    "package.json",
+    "sass"
   ]
 }
