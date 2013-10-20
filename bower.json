@@ -1,0 +1,23 @@
+{
+  "name": "eq.js",
+  "version": "0.0.0",
+  "authors": [
+    "Sam Richard <snugug@gmail.com>"
+  ],
+  "description": "Element queries, fast and light",
+  "main": "dist/eq.min.js",
+  "keywords": [
+    "Element Queries",
+    "Responsive Web Design",
+    "JavaScript",
+    "RWD"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
