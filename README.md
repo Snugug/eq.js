@@ -68,6 +68,7 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
   border-color: blue;
   background-color: rgba(0, 0, 255, 0.25);
 }
+```
 
 ## Todo
 
