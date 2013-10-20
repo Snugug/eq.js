@@ -7,6 +7,14 @@ Element queries are the "holy grail" of responsive web design, allowing you to c
 
 ## Installation
 
+Installation is super easy. You can either pull down a copy from GitHub here, or you can install from [Bower](http://bower.io):
+
+```bash
+bower install eq.js --save
+```
+
+Then, add either `eq.js` or `eq.min.js` to your HTML, and you're ready to rock!
+
 ## Usage
 
 In order to use **eq.js**, you need to both include `eq.js` on your site and set up the `eq-pts` attribute on your desired element. `eq-pts` needs to be in JSON format, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
