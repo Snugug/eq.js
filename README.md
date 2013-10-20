@@ -46,7 +46,7 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
 	}
 	
 	&[data-state="medium"] {
-	  border-color: blue;
+	  border-color: orange;
 	  background-color: rgba(orange, .25);
 	}
 	
@@ -76,6 +76,40 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
   border-color: blue;
   background-color: rgba(0, 0, 255, 0.25);
 }
+```
+
+### Bonus!
+
+If you're using [Sass](http://sass-lang.com/), **eq.js** comes with a Sass partial, `_eq.scss`, that provides an `eq` mixin for handling element queries. Import it and use it like you would use a media query mixin, like the one provided by [Breakpoint](https://github.com/team-sass/breakpoint). The above Sass example then becomes something like the following:
+
+```scss
+@import "eq";
+
+.container {
+	border: 2px solid red;
+	background-color: rgba(red, .25);
+	
+	@include eq('small') {
+	  border-color: green;
+	  background-color: rgba(green .25);
+	}
+	
+	@include eq('medium') {
+	  border-color: orange;
+	  background-color: rgba(orange, .25);
+	}
+	
+	@include eq('large') {
+	  border-color: blue;
+	  background-color: rgba(blue, .25);
+	}
+}
+```
+
+If you're compiling with Compass, you're probably going to want to add your bower components directory to your import path to make importing `_eq.scss` easy. To do so, add something like the following to your `config.rb` file:
+
+```ruby
+add_import_path "bower_components/eq.js/sass"
 ```
 
 ## Todo
