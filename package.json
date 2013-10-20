@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Element queries, fast and light",
   "main": "eq.js",
   "keywords": [
