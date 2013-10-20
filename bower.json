@@ -26,6 +26,6 @@
     "css",
     "index.html",
     "package.json",
-    "sass"
+    "sass/style.scss"
   ]
 }

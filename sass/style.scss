@@ -1,12 +1,8 @@
+@import "eq";
+
 @mixin theme($color) {
   border-color: $color;
   background-color: rgba($color, .25);
-}
-
-@mixin eq($state) {
-  &[eq-state="#{$state}"] {
-    @content;
-  }
 }
 
 div div {
