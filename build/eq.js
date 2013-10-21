@@ -47,9 +47,7 @@
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
   window.onresize = debounce(function () {
-    console.time("Dom update");
     eqStates();
-    console.timeEnd("Dom update");
   }, 20);
 
 
