@@ -46,7 +46,7 @@
             '!' + rootDir + jsDir + '/**/*.min.js',
             '!node_modules/**/*.js'
           ],
-          tasks: ['jshint']
+          tasks: ['jshint', 'uglify:distMin', 'compress:dist']
         }
       },
 
@@ -139,6 +139,24 @@
       },
 
       //////////////////////////////
+      // Compress
+      //////////////////////////////
+      compress: {
+        dist: {
+          options: {
+            mode: 'gzip'
+          },
+          files: [{
+            expand: true,
+            cwd: distDir,
+            src: ['**/*.min.js'],
+            dest: distDir,
+            ext: '.gz.js'
+          }]
+        }
+      },
+
+      //////////////////////////////
       // Parallel
       //////////////////////////////
       parallel: {
@@ -192,7 +210,7 @@
     // Build Task
     //////////////////////////////
     grunt.registerTask('build', 'Builds Distribution File', function() {
-      grunt.task.run(['uglify:distMin']);
+      grunt.task.run(['uglify:distMin', 'compress:dist']);
     });
 
   };
