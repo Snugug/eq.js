@@ -3,7 +3,7 @@
 
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
 
-**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at less than 1Kb and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute to your element and you're ready to go!
+**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 1KB minified, less than 650B gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute to your element and you're ready to go!
 
 ## Installation
 
@@ -27,7 +27,7 @@ In order to use **eq.js**, you need to both include `eq.js` on your site and set
 
 ### IT IS VERY IMPORTANT THAT THE JSON IN `eq-pts` IS FORMATTED CORRECTLY OR `eq.js` WILL NOT TRIGGER.
 
-**`eq-pts` attribute value *must* be wrapped in single quotes and include the curly brace. Keys *must* be wrapped in double quotes. Values *must not* be wrapped in quotes. States need to go from smallest to largest in value**
+**`eq-pts` attribute value *must* be wrapped in single quotes and include the curly brace. Keys *must* be wrapped in double quotes. Values *must not* be wrapped in quotes.**
 
 When **eq.js** has determined which state your element is in, it will add an `eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `eq-state` attribute.
 
@@ -114,7 +114,6 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Todo
 
-* Sort states based on value size to eliminate the need for manual sort.
 * Detect for addition or removal of DOM elements to determine available elements.
 * Provide Sass mixins and CSS API to reduce what needs to be controlled in HTML (maybe)
 
@@ -124,7 +123,7 @@ add_import_path "bower_components/eq.js/sass"
 
 The process for determining which state to apply is primarily greedy for no state, then greedy for the largest state. If the element is neither smaller than its smallest state nor larger than its largest state, it then traverses each state to determine which state is correct. It does this by comparing one state to the next state up, ensuring that the current state is both greater than or equal to the defined `min-width` value and less than the next state's `min-width`.
 
-Performance wise, the script handles itself very well even with thousands of nodes. Unfortunately, it is hard to place an exact number on performance as performance plunges into oblivion with Chrome's profiling tool open.
+Performance wise, the script handles itself very well even with thousands of nodes. With this current test setup of around 2.2k nodes, it can parse all of the nodes, calculate the size, and apply the proper attributes in a little less than 40ms in Google Chrome. Your results may vary, but it should be plenty fast.
 
 Be careful what changes you choose to make with this new found power. While element queries are great in theory, they can cause lots of heartache, especially when combined with inline elements. This script very consciously does not and will not attempt to recalculate element queries on all DOM changes as that is very likely to result in a never-ending rabbit hole of craziness. This, IMO, is one of the biggest things holding back element queries being implemented natively.
 
