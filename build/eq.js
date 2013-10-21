@@ -38,9 +38,7 @@
     eqs = document.querySelectorAll('[eq-pts]');
     eqsLength = eqs.length;
 
-    for (var i = 0; i < eqsLength; i++) {
-      eqState(eqs[i]);
-    }
+    eqStates();
   };
 
   //////////////////////////////
@@ -49,27 +47,34 @@
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
   window.onresize = debounce(function () {
-    for (var i = 0; i < eqsLength; i++) {
-      eqState(eqs[i]);
-    }
+    eqStates();
   }, 20);
 
-  //////////////////////////////
-  // eqState Function
-  //
-  // @obj - A node element
-  //
-  // Finds with of @obj, transforms `eq-pts` attribute into JSON, reads through JSON to determine `min-width`, sets `eq-state`
-  //////////////////////////////
-  var eqState = function (obj) {
-    var objWidth = obj.offsetWidth;
-    // var objHeight = obj.offsetHeight;
 
-    var eqPts = obj.getAttribute('eq-pts');
+  var eqStates = function () {
+    // Read offset width of all nodes
+    var width = [], eqPtsValues = [], eqPts, i;
+    for (i = 0; i < eqsLength; i++) {
+      width.push(eqs[i].offsetWidth);
+      eqPts = {};
+      try {
+        eqPts = JSON.parse(eqs[i].getAttribute('eq-pts'));
+      }
+      catch (e) {
+        console.log('Invalid JSON. Remember to wrap your attribute in single quotes (\') and your keys in double quotes (")');
+      }
+      eqPtsValues.push(eqPts);
+    }
 
-    try {
-      eqPts = JSON.parse(eqPts);
+    // Update nodes
+    for (i = 0; i < eqsLength; i++) {
 
+      // Quick fix to get the copied code working:
+      var objWidth = width[i];
+      var obj = eqs[i];
+      eqPts = eqPtsValues[i];
+
+      // Copied from eqState
       var eqStates = Object.keys(eqPts);
       var eqPtsLength = eqStates.length;
 
@@ -83,11 +88,11 @@
         obj.setAttribute('eq-state', lastKey);
       }
       else {
-        for (var i = 0; i < eqPtsLength; i++) {
-          var thisKey = eqStates[i];
-          var nextKey = eqStates[i + 1];
+        for (var j = 0; j < eqPtsLength; j++) {
+          var thisKey = eqStates[j];
+          var nextKey = eqStates[j + 1];
 
-          if (i === 0 && objWidth < eqPts[thisKey]) {
+          if (j === 0 && objWidth < eqPts[thisKey]) {
             obj.removeAttribute('eq-state');
             break;
           }
@@ -102,10 +107,11 @@
             break;
           }
         }
+
+
       }
-    }
-    catch (e) {
-      console.log('Invalid JSON. Remember to wrap your attribute in single quotes (\') and your keys in double quotes (")');
+
     }
   };
+
 })();
