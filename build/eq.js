@@ -26,6 +26,33 @@
   };
 
   //////////////////////////////
+  // Sort Object
+  // Sorts a simple object (key: value) by value and returns a sorted object
+  //////////////////////////////
+  function sortObject(obj) {
+    var arr = [];
+    var rv = {};
+
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        arr.push({
+          'key': prop,
+          'value': obj[prop]
+        });
+      }
+    }
+    arr.sort(function (a, b) { return a.value - b.value; });
+    //arr.sort(function(a, b) { a.value.toLowerCase().localeCompare(b.value.toLowerCase()); }); //use this to sort as strings
+
+    for (var i = 0; i < arr.length; i++) {
+      var item = arr[i];
+      rv[item.key] = item.value;
+    }
+
+    return rv; // returns array
+  }
+
+  //////////////////////////////
   // Window Load
   //
   // Grab all DOM elements with an `eq-pts` attribute
@@ -54,6 +81,7 @@
   var eqStates = function () {
     // Read offset width of all nodes
     var width = [], eqPtsValues = [], eqPts, i;
+
     for (i = 0; i < eqsLength; i++) {
       width.push(eqs[i].offsetWidth);
       eqPts = {};
@@ -63,30 +91,33 @@
       catch (e) {
         console.log('Invalid JSON. Remember to wrap your attribute in single quotes (\') and your keys in double quotes (")');
       }
-      eqPtsValues.push(eqPts);
+      eqPtsValues.push(sortObject(eqPts));
     }
 
     // Update nodes
     for (i = 0; i < eqsLength; i++) {
-
-      // Quick fix to get the copied code working:
+      // Set object width to found width
       var objWidth = width[i];
       var obj = eqs[i];
       eqPts = eqPtsValues[i];
 
-      // Copied from eqState
+      // Get keys for states
       var eqStates = Object.keys(eqPts);
       var eqPtsLength = eqStates.length;
 
+      // Get first and last key
       var firstKey = eqStates[0];
       var lastKey = eqStates[eqPtsLength - 1];
 
+      // Be greedy for smallest state
       if (objWidth < eqPts[firstKey]) {
         obj.removeAttribute('eq-state');
       }
+      // Be greedy for largest state
       else if (objWidth >= eqPts[lastKey]) {
         obj.setAttribute('eq-state', lastKey);
       }
+      // Traverse the states if not found
       else {
         for (var j = 0; j < eqPtsLength; j++) {
           var thisKey = eqStates[j];
@@ -107,10 +138,7 @@
             break;
           }
         }
-
-
       }
-
     }
   };
 
