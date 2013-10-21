@@ -1,5 +1,0 @@
-@mixin eq($state) {
-  &[eq-state="#{$state}"] {
-    @content;
-  }
-}
