@@ -29,7 +29,7 @@
       //////////////////////////////
       watch: {
         options: {
-          livereload: 9010
+          livereload: 9011
         },
         html: {
           files: [
