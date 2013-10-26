@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "authors": [
     "Sam Richard <snugug@gmail.com>"
   ],
@@ -29,14 +29,13 @@
     "sass/style.scss"
   ],
   "homepage": "https://github.com/Snugug/eq.js",
-  "_release": "0.4.0",
+  "_release": "0.4.1",
   "_resolution": {
     "type": "version",
-    "tag": "v0.4.0",
-    "commit": "234039ec9ec3180a5060988c58aba51d2910037b"
+    "tag": "v0.4.1",
+    "commit": "c78fc335a37272061325943bff2ad6c4763a1c91"
   },
   "_source": "git://github.com/Snugug/eq.js.git",
-  "_target": "~0.4.0",
-  "_originalSource": "eq.js",
-  "_direct": true
+  "_target": "~0.4.1",
+  "_originalSource": "eq.js"
 }
