@@ -1,0 +1,19 @@
+{
+  "name": "eq.js-demo",
+  "version": "0.4.0",
+  "homepage": "https://github.com/Snugug/eq.js",
+  "authors": [
+    "Sam Richard <snugug@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "eq.js": "~0.4.0"
+  }
+}
