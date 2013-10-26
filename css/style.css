@@ -1,4 +1,3 @@
-/* line 12, ../sass/style.scss */
 div div {
   box-sizing: border-box;
   border-width: 2px;
@@ -8,29 +7,24 @@ div div {
   border-color: red;
   background-color: rgba(255, 0, 0, 0.25);
 }
-/* line 7, ../sass/style.scss */
 div div[eq-state="small"] {
   border-color: green;
   background-color: rgba(0, 128, 0, 0.25);
 }
-/* line 7, ../sass/style.scss */
 div div[eq-state="medium"] {
   border-color: orange;
   background-color: rgba(255, 165, 0, 0.25);
 }
-/* line 7, ../sass/style.scss */
 div div[eq-state="large"] {
   border-color: blue;
   background-color: rgba(0, 0, 255, 0.25);
 }
 
-/* line 36, ../sass/style.scss */
 #left {
   width: 65%;
   float: left;
 }
 
-/* line 41, ../sass/style.scss */
 #right {
   width: 35%;
   float: right;

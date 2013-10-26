@@ -58,6 +58,7 @@
           relativeAssets: true,
           debugInfo: false,
           bundleExec: true,
+          noLineComments: true,
           sassDir: sassDir,
           imagesDir: rootDir + imgDir,
           cssDir: rootDir + cssDir,
