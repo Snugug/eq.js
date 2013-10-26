@@ -1,7 +1,7 @@
 {
   "name": "eq.js-demo",
-  "version": "0.4.0",
-  "homepage": "https://github.com/Snugug/eq.js",
+  "version": "0.4.1",
+  "homepage": "http://snugug.github.io/eq.js/",
   "authors": [
     "Sam Richard <snugug@gmail.com>"
   ],
@@ -14,6 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "eq.js": "~0.4.0"
+    "eq.js": "~0.4.1"
   }
 }
