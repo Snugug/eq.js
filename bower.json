@@ -27,5 +27,8 @@
     "index.html",
     "package.json",
     "sass/style.scss"
-  ]
+  ],
+  "dependencies": {
+    "fastdom": "git@github.com:wilsonpage/fastdom.git#0.8.4"
+  }
 }
