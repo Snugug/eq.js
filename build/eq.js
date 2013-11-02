@@ -74,31 +74,12 @@ var eqjs = {
   // Element States
   // This function will run through all nodes that have Element Query points, will determine their width, then determine what state should apply.
   //////////////////////////////
-  states: function () {
-    // Read offset width of all nodes
-    var width = [], eqPtsValues = [], eqPts, i;
+  readWidth: function (node) {
+    window.fastdom.read(function () {
+      var width = node.offsetWidth;
+      var nodeJSON = eqjs.sortObj(JSON.parse(node.getAttribute('eq-pts')));
 
-    for (i = 0; i < eqjs.nodesLength; i++) {
-      width.push(eqjs.nodes[i].offsetWidth);
-      eqPts = {};
-      try {
-        eqPts = JSON.parse(eqjs.nodes[i].getAttribute('eq-pts'));
-        eqPtsValues.push(eqPts);
-      }
-      catch (e) {
-        console.log('Invalid JSON. Remember to wrap your attribute in single quotes (\') and your keys in double quotes (")');
-      }
-    }
-
-    // Update nodes
-    for (i = 0; i < eqjs.nodesLength; i++) {
-      // Set object width to found width
-      var objWidth = width[i];
-      var obj = eqjs.nodes[i];
-      eqPts = eqPtsValues[i];
-
-      // Get keys for states
-      var eqStates = Object.keys(eqPts);
+      var eqStates = Object.keys(nodeJSON);
       var eqPtsLength = eqStates.length;
 
       // Get first and last key
@@ -106,35 +87,51 @@ var eqjs = {
       var lastKey = eqStates[eqPtsLength - 1];
 
       // Be greedy for smallest state
-      if (objWidth < eqPts[firstKey]) {
-        obj.removeAttribute('eq-state');
+      if (width < nodeJSON[firstKey]) {
+        window.fastdom.write(function () {
+          node.removeAttribute('eq-state');
+        });
       }
       // Be greedy for largest state
-      else if (objWidth >= eqPts[lastKey]) {
-        obj.setAttribute('eq-state', lastKey);
+      else if (width >= nodeJSON[lastKey]) {
+        window.fastdom.write(function () {
+          node.setAttribute('eq-state', lastKey);
+        });
       }
       // Traverse the states if not found
       else {
-        for (var j = 0; j < eqPtsLength; j++) {
-          var thisKey = eqStates[j];
-          var nextKey = eqStates[j + 1];
+        window.fastdom.write(function () {
 
-          if (j === 0 && objWidth < eqPts[thisKey]) {
-            obj.removeAttribute('eq-state');
-            break;
-          }
+          for (var j = 0; j < eqPtsLength; j++) {
+            var thisKey = eqStates[j];
+            var nextKey = eqStates[j + 1];
 
-          if (nextKey === undefined) {
-            obj.setAttribute('eq-state', thisKey);
-            break;
-          }
+            if (j === 0 && width < nodeJSON[thisKey]) {
+              node.removeAttribute('eq-state');
+              break;
+            }
 
-          if (objWidth >= eqPts[thisKey] && objWidth < eqPts[nextKey]) {
-            obj.setAttribute('eq-state', thisKey);
-            break;
+            if (nextKey === undefined) {
+              node.setAttribute('eq-state', thisKey);
+              break;
+            }
+
+            if (width >= nodeJSON[thisKey] && width < nodeJSON[nextKey]) {
+              node.setAttribute('eq-state', thisKey);
+              break;
+            }
           }
-        }
+        });
       }
+    });
+  },
+
+  states: function () {
+    // Read offset width of all nodes
+    var i;
+
+    for (i = 0; i < eqjs.nodesLength; i++) {
+      eqjs.readWidth(eqjs.nodes[i]);
     }
   }
 
