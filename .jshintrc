@@ -19,6 +19,8 @@
     "smarttabs": true,
     "predef": [
         "Drupal",
-        "Modernizr"
+        "Modernizr",
+	"module",
+	"define"
     ]
 }
