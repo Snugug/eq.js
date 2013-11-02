@@ -10,17 +10,19 @@
 // eqjs.sortObj - Sorts a key: value object based on value
 // eqjs.states - Runs through all nodes in eqjs.nodes and determines their eq state
 //////////////////////////////
-var eqjs = {
-  //////////////////////////////
-  // EQ nodes and length of node list
-  //////////////////////////////
-  nodes: [],
-  eqsLength: 0,
+(function (eqjs) {
+  'use strict';
+
+  function EQjs() {
+    this.nodes = [];
+    this.eqsLength = 0;
+  }
+
   //////////////////////////////
   // Debounce
   // Returns a function, that, as long as it continues to be invoked, will not be triggered. The function will be called after it stops being called for N milliseconds. If `immediate` is passed, trigger the function on the leading edge, instead of the trailing.
   //////////////////////////////
-  debounce: function (func, wait, immediate) {
+  EQjs.prototype.debounce = function (func, wait, immediate) {
     var timeout;
     return function () {
       var context = this, args = arguments;
@@ -37,20 +39,22 @@ var eqjs = {
         func.apply(context, args);
       }
     };
-  },
+  };
+
   //////////////////////////////
   // Refresh Nodes
   // Refreshes the list of nodes for eqjs to work with
   //////////////////////////////
-  refreshNodes: function () {
-    eqjs.nodes = document.querySelectorAll('[eq-pts]');
-    eqjs.nodesLength = eqjs.nodes.length;
-  },
+  EQjs.prototype.refreshNodes = function () {
+    EQjs.nodes = document.querySelectorAll('[eq-pts]');
+    EQjs.nodesLength = EQjs.nodes.length;
+  };
+
   //////////////////////////////
   // Sort Object
   // Sorts a simple object (key: value) by value and returns a sorted object
   //////////////////////////////
-  sortObj: function (obj) {
+  EQjs.prototype.sortObj = function (obj) {
     var arr = [];
     var rv = {};
 
@@ -69,20 +73,21 @@ var eqjs = {
       rv[item.key] = item.value;
     }
     return rv;
-  },
+  };
+
   //////////////////////////////
   // Element States
   // This function will run through all nodes that have Element Query points, will determine their width, then determine what state should apply.
   //////////////////////////////
-  states: function () {
+  EQjs.prototype.states = function () {
     // Read offset width of all nodes
     var width = [], eqPtsValues = [], eqPts, i;
 
-    for (i = 0; i < eqjs.nodesLength; i++) {
-      width.push(eqjs.nodes[i].offsetWidth);
+    for (i = 0; i < EQjs.nodesLength; i++) {
+      width.push(EQjs.nodes[i].offsetWidth);
       eqPts = {};
       try {
-        eqPts = JSON.parse(eqjs.nodes[i].getAttribute('eq-pts'));
+        eqPts = JSON.parse(EQjs.nodes[i].getAttribute('eq-pts'));
         eqPtsValues.push(eqPts);
       }
       catch (e) {
@@ -91,10 +96,10 @@ var eqjs = {
     }
 
     // Update nodes
-    for (i = 0; i < eqjs.nodesLength; i++) {
+    for (i = 0; i < EQjs.nodesLength; i++) {
       // Set object width to found width
       var objWidth = width[i];
-      var obj = eqjs.nodes[i];
+      var obj = EQjs.nodes[i];
       eqPts = eqPtsValues[i];
 
       // Get keys for states
@@ -136,13 +141,25 @@ var eqjs = {
         }
       }
     }
+  };
+
+  // We only ever want there to be
+  // one instance of EQjs in an app
+  eqjs = eqjs || new EQjs();
+
+  // Expose 'eqjs'
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = eqjs;
+  } else if (typeof define === 'function' && define.amd) {
+    define(function () {
+      return eqjs;
+    });
+  } else {
+    window.eqjs = eqjs;
   }
+})(window.eqjs);
 
-};
-
-
-
-(function () {
+(function (eqjs) {
   //////////////////////////////
   // Window Load
   //
@@ -166,4 +183,4 @@ var eqjs = {
   window.onresize = eqjs.debounce(function () {
     eqjs.states();
   }, 20);
-})(eqjs);
+})(window.eqjs);
