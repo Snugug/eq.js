@@ -114,7 +114,6 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Todo
 
-* Detect for addition or removal of DOM elements to determine available elements.
 * Provide Sass mixins and CSS API to reduce what needs to be controlled in HTML (maybe)
 
 ## Technical Mumbo Jumbo
