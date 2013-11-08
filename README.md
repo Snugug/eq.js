@@ -114,7 +114,6 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Todo
 
-* Detect for addition or removal of DOM elements to determine available elements.
 * Provide Sass mixins and CSS API to reduce what needs to be controlled in HTML (maybe)
 
 ## Technical Mumbo Jumbo
@@ -123,7 +122,7 @@ add_import_path "bower_components/eq.js/sass"
 
 The process for determining which state to apply is primarily greedy for no state, then greedy for the largest state. If the element is neither smaller than its smallest state nor larger than its largest state, it then traverses each state to determine which state is correct. It does this by comparing one state to the next state up, ensuring that the current state is both greater than or equal to the defined `min-width` value and less than the next state's `min-width`.
 
-Performance wise, the script handles itself very well even with thousands of nodes. With this current test setup of around 2.2k nodes, it can parse all of the nodes, calculate the size, and apply the proper attributes in a little less than 40ms in Google Chrome. Your results may vary, but it should be plenty fast.
+Performance wise, the script handles itself very well even with thousands of nodes. With this current test setup of around 2.2k nodes, it can parse all of the nodes, calculate the size, and apply the proper attributes in less than 30ms. We're employing [requestAnimationFrame](http://www.html5rocks.com/en/tutorials/speed/animations/) to reduce layout thrashing and produce smooth layout and resize.
 
 Be careful what changes you choose to make with this new found power. While element queries are great in theory, they can cause lots of heartache, especially when combined with inline elements. This script very consciously does not and will not attempt to recalculate element queries on all DOM changes as that is very likely to result in a never-ending rabbit hole of craziness. This, IMO, is one of the biggest things holding back element queries being implemented natively.
 
