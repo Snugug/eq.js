@@ -74,7 +74,7 @@
     for (i = 0; i < EQjs.nodesLength; i++) {
       widths.push(EQjs.nodes[i].offsetWidth);
       try {
-        points.push(JSON.parse(EQjs.nodes[i].getAttribute('eq-pts')));
+        points.push(EQjs.sortObj(EQjs.nodes[i].getAttribute('data-eq-pts')));
       }
       catch (e) {
         points.push({});
@@ -111,11 +111,11 @@
 
       // Be greedy for smallest state
       if (objWidth < eqPts[firstKey]) {
-        obj.removeAttribute('eq-state');
+        obj.removeAttribute('data-eq-state');
       }
       // Be greedy for largest state
       else if (objWidth >= eqPts[lastKey]) {
-        obj.setAttribute('eq-state', lastKey);
+        obj.setAttribute('data-eq-state', lastKey);
       }
       // Traverse the states if not found
       else {
@@ -124,17 +124,17 @@
           var nextKey = eqStates[j + 1];
 
           if (j === 0 && objWidth < eqPts[thisKey]) {
-            obj.removeAttribute('eq-state');
+            obj.removeAttribute('data-eq-state');
             break;
           }
 
           if (nextKey === undefined) {
-            obj.setAttribute('eq-state', thisKey);
+            obj.setAttribute('data-eq-state', thisKey);
             break;
           }
 
           if (objWidth >= eqPts[thisKey] && objWidth < eqPts[nextKey]) {
-            obj.setAttribute('eq-state', thisKey);
+            obj.setAttribute('data-eq-state', thisKey);
             break;
           }
         }
@@ -147,7 +147,7 @@
   // Refreshes the list of nodes for eqjs to work with
   //////////////////////////////
   EQjs.refreshNodes = function () {
-    EQjs.nodes = document.querySelectorAll('[eq-pts]');
+    EQjs.nodes = document.querySelectorAll('[data-eq-pts]');
     EQjs.nodesLength = EQjs.nodes.length;
   };
 
@@ -159,17 +159,19 @@
     var arr = [];
     var rv = {};
 
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        arr.push({
-          'key': prop,
-          'value': obj[prop]
-        });
-      }
+    var objSplit = obj.split(',');
+
+    for (var i = 0; i < objSplit.length; i++) {
+      var sSplit = objSplit[i].split(':');
+      arr.push({
+        'key': sSplit[0].replace(/^\s+|\s+$/g, ''),
+        'value': parseFloat(sSplit[1])
+      });
     }
+
     arr.sort(function (a, b) { return a.value - b.value; });
 
-    for (var i = 0; i < arr.length; i++) {
+    for (i = 0; i < arr.length; i++) {
       var item = arr[i];
       rv[item.key] = item.value;
     }
