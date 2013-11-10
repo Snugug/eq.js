@@ -17,19 +17,15 @@ Then, add either `eq.js` or `eq.min.js` to your HTML, and you're ready to rock!
 
 ## Usage
 
-In order to use **eq.js**, you need to both include `eq.js` on your site and set up the `eq-pts` attribute on your desired element. `eq-pts` needs to be in JSON format, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
+In order to use **eq.js**, you need to both include `eq.js` on your site and set up the `data-eq-pts` attribute on your desired element. `data-eq-pts` needs to be written in `key: value` pairs separated by a comma `,`, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
 
 ```html
-<div class='component' eq-pts='{"small": 400, "medium": 600, "large": 900}'>
+<div class='component' data-eq-pts="small: 400, medium: 600, large: 900">
   <h1>Hello World</h1>
 </div>
 ```
 
-### IT IS VERY IMPORTANT THAT THE JSON IN `eq-pts` IS FORMATTED CORRECTLY OR `eq.js` WILL NOT TRIGGER.
-
-**`eq-pts` attribute value *must* be wrapped in single quotes and include the curly brace. Keys *must* be wrapped in double quotes. Values *must not* be wrapped in quotes.**
-
-When **eq.js** has determined which state your element is in, it will add an `eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `eq-state` attribute.
+When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
 
 From there, proceed with styling as normal! Because **eq.js** uses attributes, you're going to want to select using attribute selectors. Styling follows the same patters as normal `min-width` media query styling, with styling for the base first, then subsequent styling added on top:
 
