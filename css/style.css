@@ -7,15 +7,15 @@ div div {
   border-color: red;
   background-color: rgba(255, 0, 0, 0.25);
 }
-div div[eq-state="small"] {
+div div[data-eq-state="small"] {
   border-color: green;
   background-color: rgba(0, 128, 0, 0.25);
 }
-div div[eq-state="medium"] {
+div div[data-eq-state="medium"] {
   border-color: orange;
   background-color: rgba(255, 165, 0, 0.25);
 }
-div div[eq-state="large"] {
+div div[data-eq-state="large"] {
   border-color: blue;
   background-color: rgba(0, 0, 255, 0.25);
 }
