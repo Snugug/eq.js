@@ -82,19 +82,17 @@
       }
     }
 
+    proto.widths = widths;
+    proto.points = points;
+
     if (nodes && typeof(nodes) !== 'number') {
       proto.nodeWrites(nodes, widths, points);
     }
+    else if (load) {
+      proto.nodeWrites();
+    }
     else {
-      proto.widths = widths;
-      proto.points = points;
-
-      if (load) {
-        proto.nodeWrites();
-      }
-      else {
-        window.requestAnimationFrame(proto.nodeWrites);
-      }
+      window.requestAnimationFrame(proto.nodeWrites);
     }
   };
 
@@ -106,10 +104,12 @@
   //  widths - optional, widths of nodes to use. Only used if `nodes` is passed in
   //  points - optional, points of nodes to use. Only used if `nodes` is passed in
   //////////////////////////////
-  EQjs.prototype.nodeWrites = function (nodes, widths, points) {
-    var i;
-    var proto = Object.getPrototypeOf(eqjs);
-    var length;
+  EQjs.prototype.nodeWrites = function (nodes) {
+    var i,
+    length,
+    proto = Object.getPrototypeOf(eqjs),
+    widths = proto.widths,
+    points = proto.points;
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -117,8 +117,6 @@
     else {
       nodes = proto.nodes;
       length = proto.nodesLength;
-      widths = proto.widths;
-      points = proto.points;
     }
 
     for (i = 0; i < length; i++) {
