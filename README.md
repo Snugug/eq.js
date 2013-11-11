@@ -110,6 +110,24 @@ If you're compiling with Compass, you're probably going to want to add your bowe
 add_import_path "bower_components/eq.js/sass"
 ```
 
+## Browser Support
+
+**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides a polyfill for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe), so it should work in the following browsers:
+
+* IE8+
+* Firefox 3.5+
+* Chrome
+* Safari
+* Opera 10.0+
+* iOS Safari
+* Opera Mini
+* Android Browser
+* Blackberry Browser
+* Opera Mobile
+* Chrome for Android
+* Firefox for Android
+* IE Mobile
+
 ## Todo
 
 * Provide Sass mixins and CSS API to reduce what needs to be controlled in HTML (maybe)
