@@ -21,17 +21,21 @@
   }
 
   //////////////////////////////
-  // Request Animation Frame
+  // Request Animation Frame Polyfill
+  //
+  // Written by  Erik Möller and Paul Irish
+  // From http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
   //////////////////////////////
   var lastTime = 0;
   var vendors = ['webkit', 'moz'];
-  var frames;
   for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-    frames = window[vendors[x] + 'RequestAnimationFrame'];
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
   }
 
-  if (!frames) {
-    frames = function (callback) {
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function (callback, element) {
+      element = element;
       var currTime = new Date().getTime();
       var timeToCall = Math.max(0, 16 - (currTime - lastTime));
       var id = window.setTimeout(function () {
@@ -42,28 +46,11 @@
     };
   }
 
-  //////////////////////////////
-  // Debounce
-  // Returns a function, that, as long as it continues to be invoked, will not be triggered. The function will be called after it stops being called for N milliseconds. If `immediate` is passed, trigger the function on the leading edge, instead of the trailing.
-  //////////////////////////////
-  // var debounce = function (func, wait, immediate) {
-  //   var timeout;
-  //   return function () {
-  //     var context = this, args = arguments;
-  //     var later = function () {
-  //       timeout = null;
-  //       if (!immediate) {
-  //         func.apply(context, args);
-  //       }
-  //     };
-  //     var callNow = immediate && !timeout;
-  //     clearTimeout(timeout);
-  //     timeout = setTimeout(later, wait);
-  //     if (callNow) {
-  //       func.apply(context, args);
-  //     }
-  //   };
-  // };
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function (id) {
+      clearTimeout(id);
+    };
+  }
 
   //////////////////////////////
   // Read
@@ -88,7 +75,7 @@
       EQjs.nodeWrites();
     }
     else {
-      frames(EQjs.nodeWrites);
+      window.requestAnimationFrame(EQjs.nodeWrites);
     }
   };
 
@@ -195,7 +182,7 @@
   //////////////////////////////
   window.onresize = function () {
     EQjs.refreshNodes();
-    frames(EQjs.nodeReads);
+    window.requestAnimationFrame(EQjs.nodeReads);
   };
 
   // We only ever want there to be
