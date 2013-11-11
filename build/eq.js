@@ -5,10 +5,10 @@
 // eqjs.nodes - List of all nodes to act upon when eqjs.states is called
 // eqjs.nodesLength - Number of nodes in eqjs.nodes
 //
-// eqjs.debounce - Debounce function, used for capturing multiple fires of an event like window.onresize
 // eqjs.refreshNodes - Call this function to refresh the list of nodes that eq.js should act on
 // eqjs.sortObj - Sorts a key: value object based on value
-// eqjs.states - Runs through all nodes in eqjs.nodes and determines their eq state
+// eqjs.query - Runs through all nodes and finds their widths and points
+// eqjs.nodeWrites - Runs through all nodes and writes their eq status
 //////////////////////////////
 (function (eqjs) {
   'use strict';
@@ -53,40 +53,79 @@
   }
 
   //////////////////////////////
-  // Read
+  // Query
+  //
+  // Reads nodes and finds the widths/points
+  //  nodes - optional, an array or NodeList of nodes to query
+  //  load - Whether it's an initial load or not. If nodes are passed in, forces `false`
   //////////////////////////////
-  EQjs.nodeReads = function (load) {
+  EQjs.prototype.query = function (nodes, load) {
+    var proto = Object.getPrototypeOf(eqjs);
+    var length;
+
+    if (nodes && typeof(nodes) !== 'number') {
+      length = nodes.length;
+    }
+    else {
+      nodes = proto.nodes;
+      length = proto.nodesLength;
+    }
     var widths = [], points = [], i;
 
-    for (i = 0; i < EQjs.nodesLength; i++) {
-      widths.push(EQjs.nodes[i].offsetWidth);
+    for (i = 0; i < length; i++) {
+      widths.push(nodes[i].offsetWidth);
       try {
-        points.push(EQjs.sortObj(EQjs.nodes[i].getAttribute('data-eq-pts')));
+        points.push(proto.sortObj(nodes[i].getAttribute('data-eq-pts')));
       }
       catch (e) {
         points.push({});
       }
     }
 
-    EQjs.widths = widths;
-    EQjs.points = points;
-
-    if (load) {
-      EQjs.nodeWrites();
+    if (nodes && typeof(nodes) !== 'number') {
+      proto.nodeWrites(nodes, widths, points);
     }
     else {
-      window.requestAnimationFrame(EQjs.nodeWrites);
+      proto.widths = widths;
+      proto.points = points;
+
+      if (load) {
+        proto.nodeWrites();
+      }
+      else {
+        window.requestAnimationFrame(proto.nodeWrites);
+      }
     }
   };
 
-  EQjs.nodeWrites = function () {
+  //////////////////////////////
+  // NodeWrites
+  //
+  // Writes the data attribute to the object
+  //  nodes - optional, an array or NodeList of nodes to query
+  //  widths - optional, widths of nodes to use. Only used if `nodes` is passed in
+  //  points - optional, points of nodes to use. Only used if `nodes` is passed in
+  //////////////////////////////
+  EQjs.prototype.nodeWrites = function (nodes, widths, points) {
     var i;
+    var proto = Object.getPrototypeOf(eqjs);
+    var length;
 
-    for (i = 0; i < EQjs.nodesLength; i++) {
+    if (nodes && typeof(nodes) !== 'number') {
+      length = nodes.length;
+    }
+    else {
+      nodes = proto.nodes;
+      length = proto.nodesLength;
+      widths = proto.widths;
+      points = proto.points;
+    }
+
+    for (i = 0; i < length; i++) {
       // Set object width to found width
-      var objWidth = EQjs.widths[i];
-      var obj = EQjs.nodes[i];
-      var eqPts = EQjs.points[i];
+      var objWidth = widths[i];
+      var obj = nodes[i];
+      var eqPts = points[i];
 
       // Get keys for states
       var eqStates = Object.keys(eqPts);
@@ -133,16 +172,17 @@
   // Refresh Nodes
   // Refreshes the list of nodes for eqjs to work with
   //////////////////////////////
-  EQjs.refreshNodes = function () {
-    EQjs.nodes = document.querySelectorAll('[data-eq-pts]');
-    EQjs.nodesLength = EQjs.nodes.length;
+  EQjs.prototype.refreshNodes = function () {
+    var proto = Object.getPrototypeOf(eqjs);
+    proto.nodes = document.querySelectorAll('[data-eq-pts]');
+    proto.nodesLength = proto.nodes.length;
   };
 
   //////////////////////////////
   // Sort Object
   // Sorts a simple object (key: value) by value and returns a sorted object
   //////////////////////////////
-  EQjs.sortObj = function (obj) {
+  EQjs.prototype.sortObj = function (obj) {
     var arr = [];
     var rv = {};
 
@@ -166,13 +206,19 @@
   };
 
   //////////////////////////////
+  // We only ever want there to be
+  // one instance of EQjs in an app
+  //////////////////////////////
+  eqjs = eqjs || new EQjs();
+
+  //////////////////////////////
   // Window Onload
   //
   // Fires on load
   //////////////////////////////
   window.onload = function () {
-    EQjs.refreshNodes();
-    EQjs.nodeReads(true);
+    eqjs.refreshNodes();
+    eqjs.query(undefined, true);
   };
 
   //////////////////////////////
@@ -181,13 +227,9 @@
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
   window.onresize = function () {
-    EQjs.refreshNodes();
-    window.requestAnimationFrame(EQjs.nodeReads);
+    eqjs.refreshNodes();
+    window.requestAnimationFrame(eqjs.query);
   };
-
-  // We only ever want there to be
-  // one instance of EQjs in an app
-  eqjs = eqjs || new EQjs();
 
   // Expose 'eqjs'
   if (typeof module !== 'undefined' && module.exports) {
