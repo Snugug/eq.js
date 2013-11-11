@@ -5,97 +5,127 @@
 // eqjs.nodes - List of all nodes to act upon when eqjs.states is called
 // eqjs.nodesLength - Number of nodes in eqjs.nodes
 //
-// eqjs.debounce - Debounce function, used for capturing multiple fires of an event like window.onresize
 // eqjs.refreshNodes - Call this function to refresh the list of nodes that eq.js should act on
 // eqjs.sortObj - Sorts a key: value object based on value
-// eqjs.states - Runs through all nodes in eqjs.nodes and determines their eq state
+// eqjs.query - Runs through all nodes and finds their widths and points
+// eqjs.nodeWrites - Runs through all nodes and writes their eq status
 //////////////////////////////
-var eqjs = {
+(function (eqjs) {
+  'use strict';
+
+  function EQjs() {
+    this.nodes = [];
+    this.eqsLength = 0;
+    this.widths = [];
+    this.points = [];
+  }
+
   //////////////////////////////
-  // EQ nodes and length of node list
+  // Request Animation Frame Polyfill
+  //
+  // Written by  Erik Möller and Paul Irish
+  // From http://www.paulirish.com/2011/requestanimationframe-for-smart-animating/
   //////////////////////////////
-  nodes: [],
-  eqsLength: 0,
-  //////////////////////////////
-  // Debounce
-  // Returns a function, that, as long as it continues to be invoked, will not be triggered. The function will be called after it stops being called for N milliseconds. If `immediate` is passed, trigger the function on the leading edge, instead of the trailing.
-  //////////////////////////////
-  debounce: function (func, wait, immediate) {
-    var timeout;
-    return function () {
-      var context = this, args = arguments;
-      var later = function () {
-        timeout = null;
-        if (!immediate) {
-          func.apply(context, args);
-        }
-      };
-      var callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) {
-        func.apply(context, args);
-      }
+  var lastTime = 0;
+  var vendors = ['webkit', 'moz'];
+  for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+    window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+    window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+  }
+
+  if (!window.requestAnimationFrame) {
+    window.requestAnimationFrame = function (callback, element) {
+      element = element;
+      var currTime = new Date().getTime();
+      var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+      var id = window.setTimeout(function () {
+        callback(currTime + timeToCall);
+      }, timeToCall);
+      lastTime = currTime + timeToCall;
+      return id;
     };
-  },
-  //////////////////////////////
-  // Refresh Nodes
-  // Refreshes the list of nodes for eqjs to work with
-  //////////////////////////////
-  refreshNodes: function () {
-    eqjs.nodes = document.querySelectorAll('[eq-pts]');
-    eqjs.nodesLength = eqjs.nodes.length;
-  },
-  //////////////////////////////
-  // Sort Object
-  // Sorts a simple object (key: value) by value and returns a sorted object
-  //////////////////////////////
-  sortObj: function (obj) {
-    var arr = [];
-    var rv = {};
+  }
 
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        arr.push({
-          'key': prop,
-          'value': obj[prop]
-        });
-      }
+  if (!window.cancelAnimationFrame) {
+    window.cancelAnimationFrame = function (id) {
+      clearTimeout(id);
+    };
+  }
+
+  //////////////////////////////
+  // Query
+  //
+  // Reads nodes and finds the widths/points
+  //  nodes - optional, an array or NodeList of nodes to query
+  //  load - Whether it's an initial load or not. If nodes are passed in, forces `false`
+  //////////////////////////////
+  EQjs.prototype.query = function (nodes, load) {
+    var proto = Object.getPrototypeOf(eqjs);
+    var length;
+
+    if (nodes && typeof(nodes) !== 'number') {
+      length = nodes.length;
     }
-    arr.sort(function (a, b) { return a.value - b.value; });
-
-    for (var i = 0; i < arr.length; i++) {
-      var item = arr[i];
-      rv[item.key] = item.value;
+    else {
+      nodes = proto.nodes;
+      length = proto.nodesLength;
     }
-    return rv;
-  },
-  //////////////////////////////
-  // Element States
-  // This function will run through all nodes that have Element Query points, will determine their width, then determine what state should apply.
-  //////////////////////////////
-  states: function () {
-    // Read offset width of all nodes
-    var width = [], eqPtsValues = [], eqPts, i;
+    var widths = [], points = [], i;
 
-    for (i = 0; i < eqjs.nodesLength; i++) {
-      width.push(eqjs.nodes[i].offsetWidth);
-      eqPts = {};
+    for (i = 0; i < length; i++) {
+      widths.push(nodes[i].offsetWidth);
       try {
-        eqPts = JSON.parse(eqjs.nodes[i].getAttribute('eq-pts'));
-        eqPtsValues.push(eqPts);
+        points.push(proto.sortObj(nodes[i].getAttribute('data-eq-pts')));
       }
       catch (e) {
-        console.log('Invalid JSON. Remember to wrap your attribute in single quotes (\') and your keys in double quotes (")');
+        points.push({});
       }
     }
 
-    // Update nodes
-    for (i = 0; i < eqjs.nodesLength; i++) {
+    if (nodes && typeof(nodes) !== 'number') {
+      proto.nodeWrites(nodes, widths, points);
+    }
+    else {
+      proto.widths = widths;
+      proto.points = points;
+
+      if (load) {
+        proto.nodeWrites();
+      }
+      else {
+        window.requestAnimationFrame(proto.nodeWrites);
+      }
+    }
+  };
+
+  //////////////////////////////
+  // NodeWrites
+  //
+  // Writes the data attribute to the object
+  //  nodes - optional, an array or NodeList of nodes to query
+  //  widths - optional, widths of nodes to use. Only used if `nodes` is passed in
+  //  points - optional, points of nodes to use. Only used if `nodes` is passed in
+  //////////////////////////////
+  EQjs.prototype.nodeWrites = function (nodes, widths, points) {
+    var i;
+    var proto = Object.getPrototypeOf(eqjs);
+    var length;
+
+    if (nodes && typeof(nodes) !== 'number') {
+      length = nodes.length;
+    }
+    else {
+      nodes = proto.nodes;
+      length = proto.nodesLength;
+      widths = proto.widths;
+      points = proto.points;
+    }
+
+    for (i = 0; i < length; i++) {
       // Set object width to found width
-      var objWidth = width[i];
-      var obj = eqjs.nodes[i];
-      eqPts = eqPtsValues[i];
+      var objWidth = widths[i];
+      var obj = nodes[i];
+      var eqPts = points[i];
 
       // Get keys for states
       var eqStates = Object.keys(eqPts);
@@ -107,11 +137,11 @@ var eqjs = {
 
       // Be greedy for smallest state
       if (objWidth < eqPts[firstKey]) {
-        obj.removeAttribute('eq-state');
+        obj.removeAttribute('data-eq-state');
       }
       // Be greedy for largest state
       else if (objWidth >= eqPts[lastKey]) {
-        obj.setAttribute('eq-state', lastKey);
+        obj.setAttribute('data-eq-state', lastKey);
       }
       // Traverse the states if not found
       else {
@@ -120,42 +150,75 @@ var eqjs = {
           var nextKey = eqStates[j + 1];
 
           if (j === 0 && objWidth < eqPts[thisKey]) {
-            obj.removeAttribute('eq-state');
+            obj.removeAttribute('data-eq-state');
             break;
           }
 
           if (nextKey === undefined) {
-            obj.setAttribute('eq-state', thisKey);
+            obj.setAttribute('data-eq-state', thisKey);
             break;
           }
 
           if (objWidth >= eqPts[thisKey] && objWidth < eqPts[nextKey]) {
-            obj.setAttribute('eq-state', thisKey);
+            obj.setAttribute('data-eq-state', thisKey);
             break;
           }
         }
       }
     }
-  }
+  };
 
-};
-
-
-
-(function () {
   //////////////////////////////
-  // Window Load
+  // Refresh Nodes
+  // Refreshes the list of nodes for eqjs to work with
+  //////////////////////////////
+  EQjs.prototype.refreshNodes = function () {
+    var proto = Object.getPrototypeOf(eqjs);
+    proto.nodes = document.querySelectorAll('[data-eq-pts]');
+    proto.nodesLength = proto.nodes.length;
+  };
+
+  //////////////////////////////
+  // Sort Object
+  // Sorts a simple object (key: value) by value and returns a sorted object
+  //////////////////////////////
+  EQjs.prototype.sortObj = function (obj) {
+    var arr = [];
+    var rv = {};
+
+    var objSplit = obj.split(',');
+
+    for (var i = 0; i < objSplit.length; i++) {
+      var sSplit = objSplit[i].split(':');
+      arr.push({
+        'key': sSplit[0].replace(/^\s+|\s+$/g, ''),
+        'value': parseFloat(sSplit[1])
+      });
+    }
+
+    arr.sort(function (a, b) { return a.value - b.value; });
+
+    for (i = 0; i < arr.length; i++) {
+      var item = arr[i];
+      rv[item.key] = item.value;
+    }
+    return rv;
+  };
+
+  //////////////////////////////
+  // We only ever want there to be
+  // one instance of EQjs in an app
+  //////////////////////////////
+  eqjs = eqjs || new EQjs();
+
+  //////////////////////////////
+  // Window Onload
   //
-  // Grab all DOM elements with an `eq-pts` attribute
-  // Find how many items there are
-  // Save both to annon-scoped variables
-  //
-  // Loop over each and pass to eqState
+  // Fires on load
   //////////////////////////////
   window.onload = function () {
     eqjs.refreshNodes();
-
-    eqjs.states();
+    eqjs.query(undefined, true);
   };
 
   //////////////////////////////
@@ -163,7 +226,19 @@ var eqjs = {
   //
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
-  window.onresize = eqjs.debounce(function () {
-    eqjs.states();
-  }, 20);
-})(eqjs);
+  window.onresize = function () {
+    eqjs.refreshNodes();
+    window.requestAnimationFrame(eqjs.query);
+  };
+
+  // Expose 'eqjs'
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = eqjs;
+  } else if (typeof define === 'function' && define.amd) {
+    define(function () {
+      return eqjs;
+    });
+  } else {
+    window.eqjs = eqjs;
+  }
+})(window.eqjs);

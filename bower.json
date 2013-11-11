@@ -14,6 +14,6 @@
     "tests"
   ],
   "dependencies": {
-    "eq.js": "~0.4.1"
+    "eq.js": "~1.0.0"
   }
 }
