@@ -112,7 +112,7 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Browser Support
 
-**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides a polyfill for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe), so it should work in the following browsers:
+**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) provides polyfills for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe), [`Object.getPrototypeOf`](http://stackoverflow.com/a/15851520/703084), and [`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FObject%2Fkeys#Compatibility) and has been tested in the following browsers:
 
 * IE8+
 * Firefox 3.5+
@@ -127,6 +127,8 @@ add_import_path "bower_components/eq.js/sass"
 * Chrome for Android
 * Firefox for Android
 * IE Mobile
+
+**Caveats**: On the current test site in IE8, the correct attributes get applied and the correct CSS gets applied (check in the developer tools, be sure to refresh the HTML after you've loaded the page or it'll appear as if they haven't!), but the correct paint doesn't get applied. I'm not entirely sure this is why, I guess this is due to the number of nodes, but really I've got no idea why it doesn't repaint properly.
 
 ## Todo
 
