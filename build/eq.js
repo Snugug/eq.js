@@ -21,6 +21,65 @@
   }
 
   //////////////////////////////
+  // Object.getPrototypeOf Polyfill
+  // From http://stackoverflow.com/a/15851520/703084
+  //////////////////////////////
+  if (typeof Object.getPrototypeOf !== 'function') {
+    Object.getPrototypeOf = ''.__proto__ === String.prototype ? function (object) {
+      return object.__proto__;
+    }
+    : function (object) {
+      // May break if the constructor has been tampered with
+      return object.constructor.prototype;
+    };
+  }
+
+  //////////////////////////////
+  // Object.keys Polyfill
+  // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FObject%2Fkeys#Compatibility
+  //////////////////////////////
+  if (!Object.keys) {
+    Object.keys = (function () {
+      /* jshint -W001 */
+      var hasOwnProperty = Object.prototype.hasOwnProperty,
+          hasDontEnumBug = !({toString: null}).propertyIsEnumerable('toString'),
+          dontEnums = [
+          'toString',
+          'toLocaleString',
+          'valueOf',
+          'hasOwnProperty',
+          'isPrototypeOf',
+          'propertyIsEnumerable',
+          'constructor'
+        ],
+          dontEnumsLength = dontEnums.length;
+
+      return function (obj) {
+        if (typeof obj !== 'object' && (typeof obj !== 'function' || obj === null)) {
+          throw new TypeError('Object.keys called on non-object');
+        }
+
+        var result = [], prop, i;
+
+        for (prop in obj) {
+          if (hasOwnProperty.call(obj, prop)) {
+            result.push(prop);
+          }
+        }
+
+        if (hasDontEnumBug) {
+          for (i = 0; i < dontEnumsLength; i++) {
+            if (hasOwnProperty.call(obj, dontEnums[i])) {
+              result.push(dontEnums[i]);
+            }
+          }
+        }
+        return result;
+      };
+    }());
+  }
+
+  //////////////////////////////
   // Request Animation Frame Polyfill
   //
   // Written by  Erik Möller and Paul Irish
