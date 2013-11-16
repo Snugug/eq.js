@@ -112,7 +112,7 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Browser Support
 
-**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) provides polyfills for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe), [`Object.getPrototypeOf`](http://stackoverflow.com/a/15851520/703084), and [`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys?redirectlocale=en-US&redirectslug=JavaScript%2FReference%2FGlobal_Objects%2FObject%2Fkeys#Compatibility) and has been tested in the following browsers:
+**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides polyfills for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe) and [`Object.getPrototypeOf`](http://stackoverflow.com/a/15851520/703084). It has been tested in the following browsers:
 
 * IE8+
 * Firefox 3.5+
