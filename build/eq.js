@@ -67,6 +67,21 @@
   }
 
   //////////////////////////////
+  // Add event (cross browser)
+  // From http://stackoverflow.com/a/10150042
+  //////////////////////////////
+  function addEvent(elem, event, fn) {
+    if (elem.addEventListener) {
+      elem.addEventListener(event, fn, false);
+    } else {
+      elem.attachEvent('on' + event, function() {
+        // set the this pointer same as addEventListener when fn is called
+        return(fn.call(elem, window.event));
+      });
+    }
+  }
+
+  //////////////////////////////
   // Query
   //
   // Reads nodes and finds the widths/points
@@ -216,20 +231,20 @@
   //
   // Fires on load
   //////////////////////////////
-  window.onload = function () {
+  addEvent(window, 'load', function () {
     eqjs.refreshNodes();
     eqjs.query(undefined, true);
-  };
+  });
 
   //////////////////////////////
   // Window Resize
   //
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
-  window.onresize = function () {
+  addEvent(window, 'resize', function () {
     eqjs.refreshNodes();
     window.requestAnimationFrame(eqjs.query);
-  };
+  });
 
   // Expose 'eqjs'
   if (typeof module !== 'undefined' && module.exports) {
