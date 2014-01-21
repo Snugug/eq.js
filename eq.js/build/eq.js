@@ -21,6 +21,20 @@
   }
 
   //////////////////////////////
+  // Object.getPrototypeOf Polyfill
+  // From http://stackoverflow.com/a/15851520/703084
+  //////////////////////////////
+  if (typeof Object.getPrototypeOf !== 'function') {
+    Object.getPrototypeOf = ''.__proto__ === String.prototype ? function (object) {
+      return object.__proto__;
+    }
+    : function (object) {
+      // May break if the constructor has been tampered with
+      return object.constructor.prototype;
+    };
+  }
+
+  //////////////////////////////
   // Request Animation Frame Polyfill
   //
   // Written by  Erik Möller and Paul Irish
@@ -53,6 +67,21 @@
   }
 
   //////////////////////////////
+  // Add event (cross browser)
+  // From http://stackoverflow.com/a/10150042
+  //////////////////////////////
+  function addEvent(elem, event, fn) {
+    if (elem.addEventListener) {
+      elem.addEventListener(event, fn, false);
+    } else {
+      elem.attachEvent('on' + event, function () {
+        // set the this pointer same as addEventListener when fn is called
+        return (fn.call(elem, window.event));
+      });
+    }
+  }
+
+  //////////////////////////////
   // Query
   //
   // Reads nodes and finds the widths/points
@@ -82,19 +111,17 @@
       }
     }
 
+    proto.widths = widths;
+    proto.points = points;
+
     if (nodes && typeof(nodes) !== 'number') {
       proto.nodeWrites(nodes, widths, points);
     }
+    else if (load) {
+      proto.nodeWrites();
+    }
     else {
-      proto.widths = widths;
-      proto.points = points;
-
-      if (load) {
-        proto.nodeWrites();
-      }
-      else {
-        window.requestAnimationFrame(proto.nodeWrites);
-      }
+      window.requestAnimationFrame(proto.nodeWrites);
     }
   };
 
@@ -106,10 +133,12 @@
   //  widths - optional, widths of nodes to use. Only used if `nodes` is passed in
   //  points - optional, points of nodes to use. Only used if `nodes` is passed in
   //////////////////////////////
-  EQjs.prototype.nodeWrites = function (nodes, widths, points) {
-    var i;
-    var proto = Object.getPrototypeOf(eqjs);
-    var length;
+  EQjs.prototype.nodeWrites = function (nodes) {
+    var i,
+    length,
+    proto = Object.getPrototypeOf(eqjs),
+    widths = proto.widths,
+    points = proto.points;
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -117,8 +146,6 @@
     else {
       nodes = proto.nodes;
       length = proto.nodesLength;
-      widths = proto.widths;
-      points = proto.points;
     }
 
     for (i = 0; i < length; i++) {
@@ -128,39 +155,34 @@
       var eqPts = points[i];
 
       // Get keys for states
-      var eqStates = Object.keys(eqPts);
-      var eqPtsLength = eqStates.length;
-
-      // Get first and last key
-      var firstKey = eqStates[0];
-      var lastKey = eqStates[eqPtsLength - 1];
+      var eqPtsLength = eqPts.length;
 
       // Be greedy for smallest state
-      if (objWidth < eqPts[firstKey]) {
+      if (objWidth < eqPts[0].value) {
         obj.removeAttribute('data-eq-state');
       }
       // Be greedy for largest state
-      else if (objWidth >= eqPts[lastKey]) {
-        obj.setAttribute('data-eq-state', lastKey);
+      else if (objWidth >= eqPts[eqPtsLength - 1].value) {
+        obj.setAttribute('data-eq-state', eqPts[eqPtsLength - 1].key);
       }
       // Traverse the states if not found
       else {
         for (var j = 0; j < eqPtsLength; j++) {
-          var thisKey = eqStates[j];
-          var nextKey = eqStates[j + 1];
+          var current = eqPts[j];
+          var next = eqPts[j + 1];
 
-          if (j === 0 && objWidth < eqPts[thisKey]) {
+          if (j === 0 && objWidth < current.value) {
             obj.removeAttribute('data-eq-state');
             break;
           }
 
-          if (nextKey === undefined) {
-            obj.setAttribute('data-eq-state', thisKey);
+          if (next.value === undefined) {
+            obj.setAttribute('data-eq-state', next.key);
             break;
           }
 
-          if (objWidth >= eqPts[thisKey] && objWidth < eqPts[nextKey]) {
-            obj.setAttribute('data-eq-state', thisKey);
+          if (objWidth >= current.value && objWidth < next.value) {
+            obj.setAttribute('data-eq-state', current.key);
             break;
           }
         }
@@ -184,7 +206,6 @@
   //////////////////////////////
   EQjs.prototype.sortObj = function (obj) {
     var arr = [];
-    var rv = {};
 
     var objSplit = obj.split(',');
 
@@ -196,13 +217,7 @@
       });
     }
 
-    arr.sort(function (a, b) { return a.value - b.value; });
-
-    for (i = 0; i < arr.length; i++) {
-      var item = arr[i];
-      rv[item.key] = item.value;
-    }
-    return rv;
+    return arr.sort(function (a, b) { return a.value - b.value; });
   };
 
   //////////////////////////////
@@ -216,20 +231,20 @@
   //
   // Fires on load
   //////////////////////////////
-  window.onload = function () {
+  addEvent(window, 'load', function () {
     eqjs.refreshNodes();
     eqjs.query(undefined, true);
-  };
+  });
 
   //////////////////////////////
   // Window Resize
   //
   // Loop over each `eq-pts` element and pass to eqState
   //////////////////////////////
-  window.onresize = function () {
+  addEvent(window, 'resize', function () {
     eqjs.refreshNodes();
     window.requestAnimationFrame(eqjs.query);
-  };
+  });
 
   // Expose 'eqjs'
   if (typeof module !== 'undefined' && module.exports) {

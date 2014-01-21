@@ -1,9 +1,9 @@
-# eq.js
+# eq.js [![Analytics](https://ga-beacon.appspot.com/UA-46859145-2/snugug/eq.js?pixel)](https://github.com/snugug/eq.js)
 ### Element queries, fast and light
 
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
 
-**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 2.3KB minified, about 1KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute to your element and you're ready to go!
+**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 2.6KB minified, about 1KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute to your element and you're ready to go!
 
 ## Installation
 
@@ -20,7 +20,15 @@ Then, add either `eq.js` or `eq.min.js` to your HTML, and you're ready to rock!
 In order to use **eq.js**, you need to both include `eq.js` on your site and set up the `data-eq-pts` attribute on your desired element. `data-eq-pts` needs to be written in `key: value` pairs separated by a comma `,`, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
 
 ```html
-<div class='component' data-eq-pts="small: 400, medium: 600, large: 900">
+<div class="component" data-eq-pts="small: 400, medium: 600, large: 900">
+  <h1>Hello World</h1>
+</div>
+```
+
+It is not required to provide the states in a linear, increasing order. For instance, a column may grow until a certain viewport width and then collapse again as a new grid takes effect. You can account for this easily with eq.js:
+
+```html
+<div class="component" data-eq-pts="small: 200, medium: 500, large: 700, medium: 920">
   <h1>Hello World</h1>
 </div>
 ```
@@ -112,7 +120,7 @@ add_import_path "bower_components/eq.js/sass"
 
 ## Browser Support
 
-**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides a polyfill for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe), so it should work in the following browsers:
+**eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides polyfills for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe) and [`Object.getPrototypeOf`](http://stackoverflow.com/a/15851520/703084). It has been tested in the following browsers:
 
 * IE8+
 * Firefox 3.5+
@@ -127,6 +135,8 @@ add_import_path "bower_components/eq.js/sass"
 * Chrome for Android
 * Firefox for Android
 * IE Mobile
+
+**Caveats**: On the current test site in IE8, the correct attributes get applied and the correct CSS gets applied (check in the developer tools, be sure to refresh the HTML after you've loaded the page or it'll appear as if they haven't!), but the correct paint doesn't get applied. I'm not entirely sure this is why, I guess this is due to the number of nodes, but really I've got no idea why it doesn't repaint properly.
 
 ## Todo
 
