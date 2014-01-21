@@ -10,7 +10,7 @@
 // eqjs.query - Runs through all nodes and finds their widths and points
 // eqjs.nodeWrites - Runs through all nodes and writes their eq status
 //////////////////////////////
-(function (eqjs) {
+(function (eqjs, domready) {
   'use strict';
 
   function EQjs() {
@@ -18,6 +18,7 @@
     this.eqsLength = 0;
     this.widths = [];
     this.points = [];
+    this.callback = undefined;
   }
 
   //////////////////////////////
@@ -86,11 +87,15 @@
   //
   // Reads nodes and finds the widths/points
   //  nodes - optional, an array or NodeList of nodes to query
-  //  load - Whether it's an initial load or not. If nodes are passed in, forces `false`
+  //  callback - Either boolean (`true`/`false`) to force a normal callback, or a function to use as a callback once query and nodeWrites have finished.
   //////////////////////////////
-  EQjs.prototype.query = function (nodes, load) {
+  EQjs.prototype.query = function (nodes, callback) {
     var proto = Object.getPrototypeOf(eqjs);
     var length;
+
+    if (callback && typeof(callback) === 'function') {
+      proto.callback = callback;
+    }
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -117,7 +122,7 @@
     if (nodes && typeof(nodes) !== 'number') {
       proto.nodeWrites(nodes, widths, points);
     }
-    else if (load) {
+    else if (callback && typeof(callback) !== 'function') {
       proto.nodeWrites();
     }
     else {
@@ -136,6 +141,7 @@
   EQjs.prototype.nodeWrites = function (nodes) {
     var i,
     length,
+    callback,
     proto = Object.getPrototypeOf(eqjs),
     widths = proto.widths,
     points = proto.points;
@@ -188,6 +194,13 @@
         }
       }
     }
+
+    // Run Callback
+    if (proto.callback) {
+      callback = proto.callback;
+      proto.callback = undefined;
+      callback();
+    }
   };
 
   //////////////////////////////
@@ -231,10 +244,18 @@
   //
   // Fires on load
   //////////////////////////////
-  addEvent(window, 'load', function () {
-    eqjs.refreshNodes();
-    eqjs.query(undefined, true);
-  });
+  if (domready) {
+    domready(function () {
+      eqjs.refreshNodes();
+      eqjs.query(undefined, true);
+    });
+  }
+  else {
+    addEvent(window, 'DOMContentLoaded', function () {
+      eqjs.refreshNodes();
+      eqjs.query(undefined, true);
+    });
+  }
 
   //////////////////////////////
   // Window Resize
@@ -256,4 +277,4 @@
   } else {
     window.eqjs = eqjs;
   }
-})(window.eqjs);
+})(window.eqjs, window.domready);
