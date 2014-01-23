@@ -25,14 +25,6 @@ In order to use **eq.js**, you need to both include `eq.js` on your site and set
 </div>
 ```
 
-It is not required to provide the states in a linear, increasing order. For instance, a column may grow until a certain viewport width and then collapse again as a new grid takes effect. You can account for this easily with eq.js:
-
-```html
-<div class="component" data-eq-pts="small: 200, medium: 500, large: 700, medium: 920">
-  <h1>Hello World</h1>
-</div>
-```
-
 When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
 
 **eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `onload` event and all `resize` events, querying your DOM to determine what nodes need to be queried each time. If you AJAX in any nodes that you would like to query, you need to trigger the query yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also allows for a callback function that will be fired after all updates have been applied.
