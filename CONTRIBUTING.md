@@ -1,4 +1,4 @@
-## Contributing to eq.js
+# Contributing to eq.js
 
 We love contributors! Yes we do! If you would like to contribute to eq.js, please follow the following guidelines:
 
@@ -7,3 +7,9 @@ We love contributors! Yes we do! If you would like to contribute to eq.js, pleas
 * Follow all coding standards as defined in the current code base. Any code that does not follow the existing coding standards will be asked to be re-written to follow said standards.
 * `eq.js` is very specifically *not* a jQuery/Zepto/Other Framework plugin! Any issues opened related to turning this entirely into a jQuery/Zepto/Other Framework plugin or making the core require jQuery/Zepto/Other Framework will not be considered. It's JavaScript people! Just JavaScript!
 * We are actively trying to keep `eq.js` as small and as fast as possible. Any PR that significantly increases size or decreases speed will be scrutinized heavily against the benchmark speed of the provided `index.html`.
+
+## Development
+
+Read the damn [Gruntfile][gruntfile]! Either `grunt server` to work on the project, or `grunt build` to build the dist versions.
+
+[gruntfile]: https://github.com/Snugug/eq.js/blob/1.x.x/Gruntfile.js
