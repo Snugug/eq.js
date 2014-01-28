@@ -1,5 +1,3 @@
-/*! eq.js 1.4.1 (c) 2014 Sam Richard, MIT license */
-
 /*
  * The global eqjs object that contains all eq.js functionality.
  *
