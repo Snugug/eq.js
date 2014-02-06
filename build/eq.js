@@ -199,7 +199,7 @@
     if (proto.callback) {
       callback = proto.callback;
       proto.callback = undefined;
-      callback();
+      callback(nodes);
     }
   };
 
