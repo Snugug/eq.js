@@ -114,7 +114,8 @@
           options: {
             mangle: false,
             compress: false,
-            beautify: true
+            beautify: true,
+            banner: "/*! eq.js 1.4.1 (c) 2014 Sam Richard, MIT license */\n"
           },
           files: [{
             expand: true,
@@ -127,7 +128,8 @@
         distMin: {
           options: {
             mangle: true,
-            compress: true
+            compress: true,
+            banner: "/*! eq.js 1.4.1 (c) 2014 Sam Richard, MIT license */\n"
           },
           files: [{
             expand: true,
