@@ -38,6 +38,12 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
 	border: 2px solid red;
 	background-color: rgba(red, .25);
 	
+	&[data-eq-state="small"],
+	&[data-eq-state="medium"],
+	&[data-eq-state="large"] {
+	  font-size: 1em;
+	}
+	
 	&[data-eq-state="small"] {
 	  border-color: green;
 	  background-color: rgba(green .25);
@@ -61,6 +67,11 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
 .container {
   border: 2px solid red;
   background-color: rgba(255, 0, 0, 0.25);
+}
+.container[data-eq-state="small"],
+.container[data-eq-state="medium"],
+.container[data-eq-state="large"] {
+  font-size: 1em;
 }
 .container[data-eq-state="small"] {
   border-color: green;
@@ -86,6 +97,10 @@ If you're using [Sass](http://sass-lang.com/), **eq.js** comes with a Sass parti
 .container {
 	border: 2px solid red;
 	background-color: rgba(red, .25);
+	
+	@include eq('small', 'medium', 'large') {
+	  font-size: 1em;
+	}
 	
 	@include eq('small') {
 	  border-color: green;
