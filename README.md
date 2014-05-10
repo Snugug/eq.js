@@ -1,4 +1,4 @@
-# eq.js [![Analytics](https://ga-beacon.appspot.com/UA-46859145-2/snugug/eq.js?pixel)](https://github.com/snugug/eq.js)
+# eq.js [![Analytics](https://ga-beacon.appspot.com/UA-46859145-2/snugug/eq.js?pixel)](https://github.com/snugug/eq.js) [![Bower version](https://badge.fury.io/bo/eq.js.svg)](http://badge.fury.io/bo/eq.js) [![devDependency Status](https://david-dm.org/Snugug/eq.js/dev-status.svg)](https://david-dm.org/Snugug/eq.js#info=devDependencies)
 ### Element queries, fast and light
 
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
