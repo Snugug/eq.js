@@ -20,6 +20,7 @@
     this.callback = undefined;
   }
 
+  /** @{polyfills} **/
   /*
    * Object.getPrototypeOf Polyfill
    * From http://stackoverflow.com/a/15851520/703084
@@ -65,6 +66,8 @@
       clearTimeout(id);
     };
   }
+
+  /** {polyfills}@ **/
 
   /*
    * Add event (cross browser)
