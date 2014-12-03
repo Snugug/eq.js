@@ -1,8 +1,27 @@
+//////////////////////////////
+// Variables
+//////////////////////////////
+// Selectors that were called for CSS element queries
+$EQ-Selectors: ();
+
+//////////////////////////////
+// Element Queries!
+//
+// $states - List of states to apply styling to; @include eq(small, medium, large)
+//////////////////////////////
 @mixin eq($states...) {
   @if (length($states) == 0) {
-    @warn 'You need to include a state!';
+    @if feature-exists(at-error) {
+      @error 'You need to include a state for the `eq` mixin';
+    }
+    @else {
+      @warn 'You need to include a state for the `eq` mixin';
+    }
   }
   @else {
+    //////////////////////////////
+    // Markup based Element Queries
+    //////////////////////////////
     $extend: unique-id();
     @at-root {
       %#{$extend} {
@@ -13,6 +32,42 @@
       &[data-eq-state="#{$state}"] {
         @extend %#{$extend};
       }
+    }
+  }
+}
+
+//////////////////////////////
+// Element Query Points
+//
+// Prints element query points to element's `:before`
+//
+// $states - Map of `name: size`; @include eq-pts((small: 400, medium: 600, large: 900))
+//////////////////////////////
+@mixin eq-pts($states) {
+  &:before {
+    content: '#{str-slice(inspect($states), 2, -2)}';
+  }
+
+  @if not index($EQ-Selectors, &) {
+    $EQ-Selectors: append($EQ-Selectors, &, 'comma') !global;
+  }
+}
+
+//////////////////////////////
+// Element Query Selectors
+//
+// Prints list of selectors that were called for CSS element queries to HTML's `:before`
+//////////////////////////////
+@mixin eq-selectors {
+  @at-root {
+    html:before {
+      font-size: 1px;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      color: transparent;
+      transform: translateY(-1px) translateX(-1px);
+      content: '#{$EQ-Selectors}';
     }
   }
 }
