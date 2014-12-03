@@ -13,6 +13,8 @@ div div {
 
   padding: 0 .5em;
 
+  @include eq-pts((small: 300, medium: 500, large: 700));
+
 
   @include theme(red);
 
@@ -38,3 +40,6 @@ div div {
   width: 35%;
   float: right;
 }
+
+
+@include eq-selectors;
