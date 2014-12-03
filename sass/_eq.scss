@@ -45,6 +45,7 @@ $EQ-Selectors: ();
 //////////////////////////////
 @mixin eq-pts($states) {
   &:before {
+    display: none;
     content: '#{str-slice(inspect($states), 2, -2)}';
   }
 
@@ -61,12 +62,7 @@ $EQ-Selectors: ();
 @mixin eq-selectors {
   @at-root {
     html:before {
-      font-size: 1px;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-      color: transparent;
-      transform: translateY(-1px) translateX(-1px);
+      display: none;
       content: '#{$EQ-Selectors}';
     }
   }

@@ -10,6 +10,7 @@ div div {
 }
 /* line 47, ../sass/_eq.scss */
 div div:before {
+  display: none;
   content: "small: 300, medium: 500, large: 700";
 }
 /* line 27, ../sass/_eq.scss */
@@ -40,13 +41,8 @@ div div[data-eq-state="large"] {
   float: right;
 }
 
-/* line 63, ../sass/_eq.scss */
+/* line 64, ../sass/_eq.scss */
 html:before {
-  font-size: 1px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  color: transparent;
-  transform: translateY(-1px) translateX(-1px);
+  display: none;
   content: "div div";
 }
