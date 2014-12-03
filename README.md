@@ -165,10 +165,6 @@ add_import_path "bower_components/eq.js/sass"
 
 **Caveats**: On the current test site in IE8, the correct attributes get applied and the correct CSS gets applied (check in the developer tools, be sure to refresh the HTML after you've loaded the page or it'll appear as if they haven't!), but the correct paint doesn't get applied. I'm not entirely sure this is why, I guess this is due to the number of nodes, but really I've got no idea why it doesn't repaint properly.
 
-## Todo
-
-* Provide Sass mixins and CSS API to reduce what needs to be controlled in HTML (maybe)
-
 ## Technical Mumbo Jumbo
 
 **eq.js** has been tested in all modern browsers with thousands of nodes all requesting element queries. The limiting factor performance wise is JavaScript's native `offsetWidth` calculation, which is required for each element; hey, it's an element query after all! We work on reducing read/write layout thrashing by grouping reads separately from writes.
