@@ -85,6 +85,25 @@
   }
 
   /*
+   * Parse Before
+   *
+   * Reads `:before` content and splits it at the comma
+   * From http://jsbin.com/ramiguzefiji/1/edit?html,css,js,output
+   */
+  function parseBefore(elem) {
+    return window.getComputedStyle(elem, ':before').getPropertyValue('content').slice(1, -1);
+  }
+
+  /*
+   * Merges two node lists together.
+   *
+   * From http://stackoverflow.com/questions/914783/javascript-nodelist/17262552#17262552
+   */
+  var mergeNodes = function(a, b) {
+    return [].slice.call(a).concat([].slice.call(b));
+  };
+
+  /*
    * Query
    *
    * Reads nodes and finds the widths/points
@@ -114,7 +133,15 @@
         points.push(proto.sortObj(nodes[i].getAttribute('data-eq-pts')));
       }
       catch (e) {
-        points.push({});
+        try {
+          points.push(proto.sortObj(parseBefore(nodes[i])));
+        }
+        catch (e2) {
+          points.push([{
+            key: '',
+            value: 0
+          }]);
+        }
       }
     }
 
@@ -210,8 +237,19 @@
    * Refreshes the list of nodes for eqjs to work with
    */
   EQjs.prototype.refreshNodes = function () {
-    var proto = Object.getPrototypeOf(eqjs);
+    var proto = Object.getPrototypeOf(eqjs),
+        cssNodes = [];
+
     proto.nodes = document.querySelectorAll('[data-eq-pts]');
+
+    cssNodes = parseBefore(document.querySelector('html')).split(', ');
+    cssNodes.forEach(function (v) {
+      if (v !== '') {
+        proto.nodes = mergeNodes(proto.nodes, document.querySelectorAll(v));
+      }
+    });
+
+
     proto.nodesLength = proto.nodes.length;
   };
 
@@ -242,9 +280,9 @@
   eqjs = eqjs || new EQjs();
 
   /*
-   * Window Onload
+   * Document Loaded
    *
-   * Fires on load
+   * Fires on document load; for HTML based EQs
    */
   if (domready) {
     domready(function () {
@@ -258,6 +296,14 @@
       eqjs.query(undefined, true);
     });
   }
+
+  /*
+   * Window Loaded
+   */
+  addEvent(window, 'load', function () {
+    eqjs.refreshNodes();
+    eqjs.query(undefined, true);
+  });
 
   /*
    * Window Resize
