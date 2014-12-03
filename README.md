@@ -3,7 +3,7 @@
 
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
 
-**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 2.8KB minified, less than 1.2KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute to your element and you're ready to go!
+**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 3.3KB minified, around 1.3KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute of your element (or set your points in Sass) and you're ready to go!
 
 ## Installation
 
@@ -17,7 +17,11 @@ Then, add either `eq.js` or `eq.min.js` to your HTML, and you're ready to rock!
 
 ## Usage
 
-In order to use **eq.js**, you need to both include `eq.js` on your site and set up the `data-eq-pts` attribute on your desired element. `data-eq-pts` needs to be written in `key: value` pairs separated by a comma `,`, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
+In order to use **eq.js**, you need to include `eq.js` on your site. Setting up element queries can be done in one of two ways: the first is to set up a `data-eq-pts` attribute on your desired element and the second is to use the `eq-pts` mixin in Sass. The first way is preferred, as it is faster for JavaScript to parse and can fire on `DOMContentLoaded` whereas the second way is slower and can only be fired on window `load`, increasing the likelihood of a flash of unstyled content.
+
+Both methods have you write `key: value` pairs, with the key being the human-readable name of the applied state and the value being the `min-width` pixel width of the element you would like to set the state at.
+
+With the first method, the value of `data-eq-pts` should be each pair and should be separated by a comma `,`.
 
 ```html
 <div class="component" data-eq-pts="small: 400, medium: 600, large: 900">
@@ -25,9 +29,25 @@ In order to use **eq.js**, you need to both include `eq.js` on your site and set
 </div>
 ```
 
+Similarly, with the second method, the `eq-pts` mixin is called with a map of your pairs. It is important not to quote your keys in the Sass map, or wonky things may happen in the parsing. At the bottom of your stylesheet, after all of your `eq-pts` have been called, you also need to call the `eq-selectors` mixin in order to write out the hook for **eq.js**.
+
+```scss
+.component {
+  @include eq-pts((
+    small: 400,
+    medium: 500,
+    large: 700
+  ));
+}
+
+// ... at the end of the stylesheet
+
+@include eq-selectors;
+```
+
 When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
 
-**eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `onload` event and all `resize` events, querying your DOM to determine what nodes need to be queried each time. If you AJAX in any nodes that you would like to query, you need to trigger the query yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also allows for a callback function that will be fired after all updates have been applied. `eqjs.query()` also takes a callback as a second argument with optional `nodes` parameter (for the nodes that were worked on) that will be fired once all of the nodes have been processed.
+**eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `DOMContentLoaded` and `load` events as well as all `resize` events, inspecting your DOM to determine what nodes need to be queried each time. If you AJAX in any nodes that you would like to query, you need to trigger the **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also allows for a callback function that will be fired after all updates have been applied. `eqjs.query()` also takes a callback as a second argument with optional `nodes` parameter (for the nodes that were worked on) that will be fired once all of the nodes have been processed.
 
 From there, proceed with styling as normal! Because **eq.js** uses attributes, you're going to want to select using attribute selectors. Styling follows the same patters as normal `min-width` media query styling, with styling for the base first, then subsequent styling added on top:
 
