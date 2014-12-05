@@ -14,7 +14,7 @@
   "devDependencies": {
     "deepmerge": "~0.2.5",
     "grunt": "~0.4.0",
-    "grunt-bump": "0.0.6",
+    "grunt-bump": "0.0.16",
     "grunt-contrib-compass": "~0.6.0",
     "grunt-contrib-compress": "~0.5.2",
     "grunt-contrib-connect": "~0.3.0",
