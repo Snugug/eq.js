@@ -191,7 +191,8 @@
           files: [
             'package.json',
             'bower.json'
-          ]
+          ],
+          updateConfigs: ['pkg']
           // commit: userConfig.bump.commit,
           // commitFiles: userConfig.bump.files,
           // createTag: userConfig.bump.tag,
@@ -220,5 +221,10 @@
       grunt.task.run(['uglify:distMin', 'compress:dist']);
     });
 
+    grunt.registerTask('release', 'Release a new version, push it and publish it', function (target) {
+      target = target || 'patch';
+
+      grunt.task.run('bump-only:' + target, 'build', 'bump-commit');
+    });
   };
 }());
