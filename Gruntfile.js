@@ -12,6 +12,10 @@
   module.exports = function (grunt) {
     grunt.initConfig({
 
+      pkg: {
+        version: require('./package.json').version
+      },
+
       //////////////////////////////
       // Server
       ///////////////////////////////
@@ -115,7 +119,7 @@
             mangle: false,
             compress: false,
             beautify: true,
-            banner: "/*! eq.js 1.4.1 (c) 2014 Sam Richard, MIT license */\n"
+            banner: '/*! eq.js <%=pkg.version%> (c) 2014 Sam Richard, MIT license */\n'
           },
           files: [{
             expand: true,
@@ -129,7 +133,7 @@
           options: {
             mangle: true,
             compress: true,
-            banner: "/*! eq.js 1.4.1 (c) 2014 Sam Richard, MIT license */\n"
+            banner: '/*! eq.js <%=pkg.version%> (c) 2014 Sam Richard, MIT license */\n'
           },
           files: [{
             expand: true,
