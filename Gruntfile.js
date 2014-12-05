@@ -10,6 +10,8 @@
       distDir = 'dist';
 
   module.exports = function (grunt) {
+    require('jit-grunt')(grunt); // Load grunt tasks automatically
+
     grunt.initConfig({
 
       //////////////////////////////
@@ -194,11 +196,6 @@
         }
       }
     });
-
-    //////////////////////////////
-    // Grunt Task Loads
-    //////////////////////////////
-    require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
     //////////////////////////////
     // Server Task
