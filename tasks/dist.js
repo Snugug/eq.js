@@ -24,8 +24,8 @@ var placeDist = 'dist';
 var tag = JSON.parse(fs.readFileSync('./bower.json', 'utf8')).version,
     year = new Date().getFullYear().toString();
 
-if (year !== '2014') {
-  year = '2014-' + year;
+if (year !== '2013') {
+  year = '2013-' + year;
 }
 
 //////////////////////////////
