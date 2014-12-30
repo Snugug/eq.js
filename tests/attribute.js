@@ -1,4 +1,4 @@
-describe('Set the `data-eq-state` attribute based on element width', function () {
+describe('Set the `data-eq-state` attribute based on element width and its `data-eq-pts` attribute', function () {
   var elem = document.createElement('div'),
       body = document.querySelector('body'),
       sizes = [],
