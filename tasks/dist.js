@@ -8,6 +8,7 @@ var paths = require('compass-options').paths(),
     insert = require('gulp-insert'),
     concat = require('gulp-concat'),
     sourcemap = require('gulp-sourcemaps'),
+    fs = require('fs'),
     uglify = require('gulp-uglify');
 
 //////////////////////////////
@@ -20,40 +21,33 @@ var toDist = [
 
 var placeDist = 'dist';
 
+var tag = JSON.parse(fs.readFileSync('./bower.json', 'utf8')).version,
+    year = new Date().getFullYear().toString();
+
+if (year !== '2014') {
+  year = '2014-' + year;
+}
+
 //////////////////////////////
 // Export
 //////////////////////////////
 module.exports = function (gulp, distPaths, outPath) {
   // Run once
-  gulp.task('dist--each', function (done) {
+  gulp.task('dist', function (done) {
     distPaths = distPaths || toDist;
     outPath = outPath || placeDist;
 
-    gulp.src(distPaths)
+    return gulp.src(distPaths)
       .pipe(sourcemap.init())
-      .pipe(insert.prepend('!function(){null===window.a11y&&(window.a11y={})}()\n'))
+      .pipe(insert.prepend('/*! eq.js v' + tag + ' (c) ' + year + ' Sam Richard, MIT license */\n'))
       .pipe(rename({
         extname: '.min.js'
       }))
-      .pipe(uglify())
-      .pipe(sourcemap.write('./'))
-      .pipe(gulp.dest(outPath));
-  });
-
-  //
-  gulp.task('dist--all', function (done) {
-    distPaths = distPaths || toDist;
-    outPath = outPath || placeDist;
-
-    gulp.src(distPaths)
-      .pipe(sourcemap.init())
-      .pipe(concat('a11y.js'))
-      .pipe(insert.prepend('!function(){null===window.a11y&&(window.a11y={})}()\n'))
-      .pipe(rename({
-        extname: '.min.js'
+      .pipe(uglify({
+        preserveComments: 'some'
       }))
-      .pipe(uglify())
       .pipe(sourcemap.write('./'))
       .pipe(gulp.dest(outPath));
+
   });
 }
