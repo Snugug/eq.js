@@ -235,18 +235,10 @@
    *
    * Fires on document load; for HTML based EQs
    */
-  if (domready) {
-    domready(function () {
-      eqjs.refreshNodes();
-      eqjs.query(undefined, true);
-    });
-  }
-  else {
-    addEvent(window, 'DOMContentLoaded', function () {
-      eqjs.refreshNodes();
-      eqjs.query(undefined, true);
-    });
-  }
+  addEvent(window, 'DOMContentLoaded', function () {
+    eqjs.refreshNodes();
+    eqjs.query(undefined, true);
+  });
 
   /*
    * Window Loaded

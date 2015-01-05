@@ -49,6 +49,22 @@
   }
 
   /**
+    * addEventListener Polyfill
+    *
+    * Adapted from the Financial Times polyfill service
+    * https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Event.DOMContentLoaded/polyfill.js
+  **/
+  if (!('addEventListener' in window)) {
+    document.attachEvent('onreadystatechange', function() {
+      if (document.readyState === 'complete') {
+        document.dispatchEvent(new Event('DOMContentLoaded', {
+          bubbles: true
+        }));
+      }
+    });
+  }
+
+  /**
     * getComputedStyle Polyfill
     *
     * Adapted from the Financial Times polyfill service

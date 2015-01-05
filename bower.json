@@ -27,8 +27,5 @@
     "index.html",
     "package.json",
     "sass/style.scss"
-  ],
-  "dependencies": {
-    "domready": "*"
-  }
+  ]
 }
