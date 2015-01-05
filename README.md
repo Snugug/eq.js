@@ -1,11 +1,9 @@
 # eq.js [![Build Status](https://travis-ci.org/Snugug/eq.js.svg)](https://travis-ci.org/Snugug/eq.js) [![Coverage Status](https://img.shields.io/coveralls/Snugug/eq.js.svg)](https://coveralls.io/r/Snugug/eq.js?branch=1.x.x) [![Code Climate](https://codeclimate.com/github/Snugug/eq.js/badges/gpa.svg)](https://codeclimate.com/github/Snugug/eq.js) [![Bower version](https://badge.fury.io/bo/eq.js.svg)](http://badge.fury.io/bo/eq.js)
 ### Element queries, fast and light
 
-## WARNING: 1.5.0 does not work with IE8; I totally forgot about it while writing the CSS feature. When I have resolved the issue, I will pull 1.5.0 and push 1.6.0
-
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
 
-**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 3.3KB minified, around 1.3KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute of your element (or set your points in Sass) and you're ready to go!
+**eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 2.5KB minified, around 1.1KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute of your element (or set your points in Sass) and you're ready to go!
 
 ## Installation
 
@@ -151,7 +149,7 @@ add_import_path "bower_components/eq.js/sass"
 
 **eq.js** uses [`document.querySelectorAll()`](http://caniuse.com/queryselector) and provides polyfills for [`requestAnimationFrame()`](http://caniuse.com/requestanimationframe) and [`Object.getPrototypeOf`](http://stackoverflow.com/a/15851520/703084). It has been tested in the following browsers:
 
-* IE9+ (IE8+ with [domready](https://github.com/ded/domready) available for `DOMContentLoaded` support)
+* IE8+ (see below for notes)
 * Firefox 3.5+
 * Chrome
 * Safari
@@ -165,7 +163,17 @@ add_import_path "bower_components/eq.js/sass"
 * Firefox for Android
 * IE Mobile
 
-**Caveats**: On the current test site in IE8, the correct attributes get applied and the correct CSS gets applied (check in the developer tools, be sure to refresh the HTML after you've loaded the page or it'll appear as if they haven't!), but the correct paint doesn't get applied. I'm not entirely sure this is why, I guess this is due to the number of nodes, but really I've got no idea why it doesn't repaint properly.
+### A note on IE8/Older Browser Support
+
+There are two files provided; `eq.min.js` and `eq.polyfilled.min.js`. The later includes the polyfills needed to run **eq.js** in older browsers that are missing some newer JavaScript niceties (yes, this includes IE8+). While this allows for a drop-in solution using just what's provided here, a better solution (and where a bunch of the polyfills come from), consider using something like a [polyfill service](https://github.com/Financial-Times/polyfill-service) for a more robust and well-rounded solution.
+
+The specific polyfills included are as follows:
+
+* [`Object.getPrototypeOf`](http://kangax.github.io/compat-table/es5/#Object.getPrototypeOf)
+* [`window.requestAnimationFrame`](http://caniuse.com/#feat=requestanimationframe)
+* [`Event.DOMContentLoaded`](http://caniuse.com/#feat=domcontentloaded)
+* [`window.getComputedStyle`](http://caniuse.com/#feat=getcomputedstyle)
+* [`Array.prototype.forEach`](http://kangax.github.io/compat-table/es5/#Array.prototype.forEach)
 
 ## Technical Mumbo Jumbo
 
