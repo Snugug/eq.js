@@ -49,7 +49,7 @@
   }
 
   /**
-    * addEventListener Polyfill
+    * DOMContentLoaded Polyfill
     *
     * Adapted from the Financial Times polyfill service
     * https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Event.DOMContentLoaded/polyfill.js
