@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "Element queries, fast and light",
   "main": "eq.js",
   "keywords": [
@@ -19,6 +19,7 @@
     "compass-options": "^0.1.1",
     "gulp": "^3.8.8",
     "gulp-concat": "^2.4.1",
+    "gulp-gzip": "0.0.8",
     "gulp-insert": "^0.4.0",
     "gulp-jasmine": "^1.0.1",
     "gulp-jshint": "^1.8.5",
@@ -31,6 +32,7 @@
     "karma-coveralls": "^0.1.4",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
-    "karma-spec-reporter": "0.0.13"
+    "karma-spec-reporter": "0.0.13",
+    "run-sequence": "^1.0.2"
   }
 }

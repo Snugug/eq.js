@@ -8,6 +8,8 @@ var paths = require('compass-options').paths(),
     insert = require('gulp-insert'),
     concat = require('gulp-concat'),
     sourcemap = require('gulp-sourcemaps'),
+    gzip = require('gulp-gzip'),
+    sequence = require('run-sequence'),
     fs = require('fs'),
     uglify = require('gulp-uglify');
 
@@ -33,7 +35,7 @@ if (year !== '2013') {
 //////////////////////////////
 module.exports = function (gulp, distPaths, outPath) {
   // Run once
-  gulp.task('dist', function (done) {
+  gulp.task('dist:core', function () {
     distPaths = distPaths || toDist;
     outPath = outPath || placeDist;
 
@@ -48,6 +50,49 @@ module.exports = function (gulp, distPaths, outPath) {
       }))
       .pipe(sourcemap.write('./'))
       .pipe(gulp.dest(outPath));
-
   });
+
+  //////////////////////////////
+  // Attach Polyfills
+  //////////////////////////////
+  gulp.task('dist:polyfill', function () {
+    var polyfills = fs.readFileSync('./build/polyfills.js', 'utf8');
+
+    distPaths = distPaths || toDist;
+    outPath = outPath || placeDist;
+
+    return gulp.src(distPaths)
+      .pipe(sourcemap.init())
+      .pipe(insert.prepend(polyfills))
+      .pipe(insert.prepend('/*! eq.js (with polyfills) v' + tag + ' (c) ' + year + ' Sam Richard, MIT license */\n'))
+      .pipe(rename({
+        extname: '.polyfilled.min.js'
+      }))
+      .pipe(uglify({
+        preserveComments: 'some'
+      }))
+      .pipe(sourcemap.write('./'))
+      .pipe(gulp.dest(outPath));
+  });
+
+  //////////////////////////////
+  // GZip Files
+  //////////////////////////////
+  gulp.task('dist:gzip', function () {
+    return gulp.src('./dist/**/*.js')
+      .pipe(gzip())
+      .pipe(gulp.dest('./dist/'));
+  });
+
+  //////////////////////////////
+  // Full Dist Task
+  //////////////////////////////
+  gulp.task('dist', function (cb) {
+    return sequence(
+      ['dist:core', 'dist:polyfill'],
+      'dist:gzip',
+      cb
+    );
+  });
+
 }

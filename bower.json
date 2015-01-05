@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "authors": [
     "Sam Richard <snugug@gmail.com>"
   ],
@@ -27,8 +27,5 @@
     "index.html",
     "package.json",
     "sass/style.scss"
-  ],
-  "dependencies": {
-    "domready": "*"
-  }
+  ]
 }
