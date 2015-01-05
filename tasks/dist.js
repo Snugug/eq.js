@@ -8,6 +8,8 @@ var paths = require('compass-options').paths(),
     insert = require('gulp-insert'),
     concat = require('gulp-concat'),
     sourcemap = require('gulp-sourcemaps'),
+    gzip = require('gulp-gzip'),
+    sequence = require('run-sequence'),
     fs = require('fs'),
     uglify = require('gulp-uglify');
 
@@ -50,6 +52,9 @@ module.exports = function (gulp, distPaths, outPath) {
       .pipe(gulp.dest(outPath));
   });
 
+  //////////////////////////////
+  // Attach Polyfills
+  //////////////////////////////
   gulp.task('dist:polyfill', function () {
     var polyfills = fs.readFileSync('./build/polyfills.js', 'utf8');
 
@@ -70,5 +75,24 @@ module.exports = function (gulp, distPaths, outPath) {
       .pipe(gulp.dest(outPath));
   });
 
-  gulp.task('dist', ['dist:core', 'dist:polyfill']);
+  //////////////////////////////
+  // GZip Files
+  //////////////////////////////
+  gulp.task('dist:gzip', function () {
+    return gulp.src('./dist/**/*.js')
+      .pipe(gzip())
+      .pipe(gulp.dest('./dist/'));
+  });
+
+  //////////////////////////////
+  // Full Dist Task
+  //////////////////////////////
+  gulp.task('dist', function (cb) {
+    return sequence(
+      ['dist:core', 'dist:polyfill'],
+      'dist:gzip',
+      cb
+    );
+  });
+
 }
