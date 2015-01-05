@@ -33,7 +33,7 @@ if (year !== '2013') {
 //////////////////////////////
 module.exports = function (gulp, distPaths, outPath) {
   // Run once
-  gulp.task('dist', function (done) {
+  gulp.task('dist:core', function () {
     distPaths = distPaths || toDist;
     outPath = outPath || placeDist;
 
@@ -48,6 +48,27 @@ module.exports = function (gulp, distPaths, outPath) {
       }))
       .pipe(sourcemap.write('./'))
       .pipe(gulp.dest(outPath));
-
   });
+
+  gulp.task('dist:polyfill', function () {
+    var polyfills = fs.readFileSync('./build/polyfills.js', 'utf8');
+
+    distPaths = distPaths || toDist;
+    outPath = outPath || placeDist;
+
+    return gulp.src(distPaths)
+      .pipe(sourcemap.init())
+      .pipe(insert.prepend(polyfills))
+      .pipe(insert.prepend('/*! eq.js (with polyfills) v' + tag + ' (c) ' + year + ' Sam Richard, MIT license */\n'))
+      .pipe(rename({
+        extname: '.polyfilled.min.js'
+      }))
+      .pipe(uglify({
+        preserveComments: 'some'
+      }))
+      .pipe(sourcemap.write('./'))
+      .pipe(gulp.dest(outPath));
+  });
+
+  gulp.task('dist', ['dist:core', 'dist:polyfill']);
 }

@@ -17,8 +17,7 @@ require('./tasks/karma')(gulp);
 // Dist Tasks
 //////////////////////////////
 require('./tasks/dist')(gulp, [
-  'build/**/*.js',
-  '!build/**/*.min.js'
+  'build/**/eq.js'
 ]);
 
 //////////////////////////////
