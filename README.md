@@ -1,6 +1,8 @@
 # eq.js [![Build Status](https://travis-ci.org/Snugug/eq.js.svg)](https://travis-ci.org/Snugug/eq.js) [![Coverage Status](https://img.shields.io/coveralls/Snugug/eq.js.svg)](https://coveralls.io/r/Snugug/eq.js?branch=1.x.x) [![Code Climate](https://codeclimate.com/github/Snugug/eq.js/badges/gpa.svg)](https://codeclimate.com/github/Snugug/eq.js) [![Bower version](https://badge.fury.io/bo/eq.js.svg)](http://badge.fury.io/bo/eq.js)
 ### Element queries, fast and light
 
+## WARNING: 1.5.0 does not work with IE8; I totally forgot about it while writing the CSS feature. When I have resolved the issue, I will pull 1.5.0 and push 1.6.0
+
 Element queries are the "holy grail" of responsive web design, allowing you to create a single component that can be dropped into any position in any layout and have them respond appropriately. Unfortunately, due to some hard-to-deal-with chicken-and-egg cases, especially involving inline elements, it's unlikely that element queries will make it into browsers any time soon.
 
 **eq.js** aims to be a relatively easy to use drop-in solution to JavaScript powered element queries. Weighing in at about 3.3KB minified, around 1.3KB gzipped, and requiring no external dependencies, **eq.js** sets itself apart through size, speed, and ease of use. Simply drop **eq.js** on to your site and set the `eq-pts` attribute of your element (or set your points in Sass) and you're ready to go!
