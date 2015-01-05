@@ -9,7 +9,7 @@
  * eqjs.query - Runs through all nodes and finds their widths and points
  * eqjs.nodeWrites - Runs through all nodes and writes their eq status
  */
-(function (eqjs, domready) {
+(function (eqjs) {
   'use strict';
 
   function EQjs() {
@@ -268,4 +268,4 @@
   } else {
     window.eqjs = eqjs;
   }
-})(window.eqjs, window.domready);
+})(window.eqjs);
