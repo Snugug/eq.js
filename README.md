@@ -165,7 +165,7 @@ add_import_path "bower_components/eq.js/sass"
 
 ### A note on IE8/Older Browser Support
 
-There are two files provided; `eq.min.js` and `eq.polyfilled.min.js`. The later includes the polyfills needed to run **eq.js** in older browsers that are missing some newer JavaScript niceties (yes, this includes IE8+). While this allows for a drop-in solution using just what's provided here, a better solution (and where a bunch of the polyfills come from), consider using something like a [polyfill service](https://github.com/Financial-Times/polyfill-service) for a more robust and well-rounded solution.
+There are two files provided: `eq.min.js`, `eq.polyfilled.min.js`, and `polyfills.min.js`. `eq.polyfilled.min.js` includes the polyfills needed to run **eq.js** in older browsers that are missing some newer JavaScript niceties (yes, this includes IE8+) and `polyfills.js` just includes the polyfills. While these allow for a drop-in solutions using just what's provided here, a better solution (and where a bunch of the polyfills come from), consider using something like a [polyfill service](https://github.com/Financial-Times/polyfill-service) for a more robust and well-rounded solution.
 
 The specific polyfills included are as follows:
 
