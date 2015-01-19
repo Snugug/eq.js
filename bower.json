@@ -27,5 +27,8 @@
     "index.html",
     "package.json",
     "sass/style.scss"
-  ]
+  ],
+  "devDependencies": {
+    "polyfill-service": "git@github.com:Financial-Times/polyfill-service.git#~1.1.0"
+  }
 }

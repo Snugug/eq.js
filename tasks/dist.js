@@ -30,6 +30,33 @@ if (year !== '2013') {
   year = '2013-' + year;
 }
 
+var polyfills = [
+  'Object.getPrototypeOf',
+  'requestAnimationFrame',
+  'Event.DOMContentLoaded',
+  'getComputedStyle',
+  'Array.prototype.forEach'
+];
+
+//////////////////////////////
+// Create Polyfills
+//////////////////////////////
+var buildPolyfill = function () {
+  var fill = '(function () {',
+      fillPath = './bower_components/polyfill-service/polyfills/';
+
+  polyfills.forEach(function (poly) {
+    var detect = fs.readFileSync(fillPath + poly + '/detect.js', 'utf8'),
+        pfill = fs.readFileSync(fillPath + poly + '/polyfill.js', 'utf8');
+
+    fill += 'if (!' + detect + '){' + pfill + '}';
+  });
+
+  fill += '}());'
+
+  return fill;
+};
+
 //////////////////////////////
 // Export
 //////////////////////////////
@@ -56,7 +83,7 @@ module.exports = function (gulp, distPaths, outPath) {
   // Attach Polyfills
   //////////////////////////////
   gulp.task('dist:polyfill', function () {
-    var polyfills = fs.readFileSync('./build/polyfills.js', 'utf8');
+    var polyfills = buildPolyfill();
 
     distPaths = distPaths || toDist;
     outPath = outPath || placeDist;
