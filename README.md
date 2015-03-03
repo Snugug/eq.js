@@ -47,7 +47,11 @@ Similarly, with the second method, the `eq-pts` mixin is called with a map of yo
 
 When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
 
-**eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `DOMContentLoaded` and `load` events as well as all `resize` events, inspecting your DOM to determine what nodes need to be queried each time. If you AJAX in any nodes that you would like to query, you need to trigger the **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also allows for a callback function that will be fired after all updates have been applied. `eqjs.query()` also takes a callback as a second argument with optional `nodes` parameter (for the nodes that were worked on) that will be fired once all of the nodes have been processed.
+**eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `DOMContentLoaded` and `load` events as well as all `resize` events, inspecting your DOM to determine what nodes need to be queried each time.
+
+If you dynamically add nodes that you would like to query, you need to trigger **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also takes a callback as an optional second argument that will be fired once all of the nodes have been processed. It will be passed an array of nodes that were worked on.
+
+Alternatively, you can use `eqjs.refreshNodes()` to update the listing of nodes that is use by `eqjs.query()` with all of the nodes currently in the DOM. This is useful when you know that a node has been dynamically added, but you don't have it as an object and can't pass it to `ejs.query()`.
 
 From there, proceed with styling as normal! Because **eq.js** uses attributes, you're going to want to select using attribute selectors. Styling follows the same patters as normal `min-width` media query styling, with styling for the base first, then subsequent styling added on top:
 
