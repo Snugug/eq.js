@@ -45,7 +45,7 @@ Similarly, with the second method, the `eq-pts` mixin is called with a map of yo
 @include eq-selectors;
 ```
 
-When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified. If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
+When **eq.js** has determined which state your element is in, it will add an `data-eq-state` attribute to the element set to the human-readable name of the `min-width` specified (along with any other states that have applied thus far). If the element is smaller than the smallest state, there will be no `data-eq-state` attribute. If you did not write your states in order, fear not, they will be sorted for you.
 
 **eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `DOMContentLoaded` and `load` events as well as all `resize` events, inspecting your DOM to determine what nodes need to be queried each time. If you AJAX in any nodes that you would like to query, you need to trigger the **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also allows for a callback function that will be fired after all updates have been applied. `eqjs.query()` also takes a callback as a second argument with optional `nodes` parameter (for the nodes that were worked on) that will be fired once all of the nodes have been processed.
 
@@ -58,23 +58,23 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
 	border: 2px solid red;
 	background-color: rgba(red, .25);
 	
-	&[data-eq-state="small"],
-	&[data-eq-state="medium"],
-	&[data-eq-state="large"] {
+	&[data-eq-state$="small"],
+	&[data-eq-state$="medium"],
+	&[data-eq-state$="large"] {
 	  font-size: 1em;
 	}
 	
-	&[data-eq-state="small"] {
+	&[data-eq-state$="small"] {
 	  border-color: green;
 	  background-color: rgba(green .25);
 	}
 	
-	&[data-eq-state="medium"] {
+	&[data-eq-state$="medium"] {
 	  border-color: orange;
 	  background-color: rgba(orange, .25);
 	}
 	
-	&[data-eq-state="large"] {
+	&[data-eq-state$="large"] {
 	  border-color: blue;
 	  background-color: rgba(blue, .25);
 	}
@@ -88,20 +88,20 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
   border: 2px solid red;
   background-color: rgba(255, 0, 0, 0.25);
 }
-.container[data-eq-state="small"],
-.container[data-eq-state="medium"],
-.container[data-eq-state="large"] {
+.container[data-eq-state$="small"],
+.container[data-eq-state$="medium"],
+.container[data-eq-state$="large"] {
   font-size: 1em;
 }
-.container[data-eq-state="small"] {
+.container[data-eq-state$="small"] {
   border-color: green;
   background-color: rgba(0, 128, 0, 0.25);
 }
-.container[data-eq-state="medium"] {
+.container[data-eq-state$="medium"] {
   border-color: orange;
   background-color: rgba(255, 165, 0, 0.25);
 }
-.container[data-eq-state="large"] {
+.container[data-eq-state$="large"] {
   border-color: blue;
   background-color: rgba(0, 0, 255, 0.25);
 }
@@ -109,7 +109,7 @@ From there, proceed with styling as normal! Because **eq.js** uses attributes, y
 
 ### Bonus!
 
-If you're using [Sass](http://sass-lang.com/), **eq.js** comes with a Sass partial, `_eq.scss`, that provides an `eq` mixin for handling element queries. Import it and use it like you would use a media query mixin, like the one provided by [Breakpoint](https://github.com/team-sass/breakpoint). The above Sass example then becomes something like the following:
+If you're using [Sass](http://sass-lang.com/), **eq.js** comes with a Sass partial, `_eq.scss`, that provides an `eq` mixin and an `eq-contains` mixin for handling element queries. Import it and use it like you would use a media query mixin, like the one provided by [Breakpoint](https://github.com/team-sass/breakpoint). The above Sass example then becomes something like the following:
 
 ```scss
 @import "eq";
@@ -138,6 +138,8 @@ If you're using [Sass](http://sass-lang.com/), **eq.js** comes with a Sass parti
 	}
 }
 ```
+
+The `eq-contains` mixin will allow you to apply styling as long as that state is available in the `data-eq-state` list. Passing in a comma separated list is similar to an `or` media query in that at least one of those states must be active, passing in a space separated list is similar to an `and` media query in that all of the states must be active. Using `eq-contains` will allow styles to be built on top of each other.
 
 If you're compiling with Compass, you're probably going to want to add your bower components directory to your import path to make importing `_eq.scss` easy. To do so, add something like the following to your `config.rb` file:
 
