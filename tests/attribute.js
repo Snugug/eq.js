@@ -64,42 +64,42 @@ describe('Set the `data-eq-state` attribute based on element width and its `data
   //////////////////////////////
   // Medium Sizes
   //////////////////////////////
-  it('should be `medium` when its width is equal to its smallest size', function () {
+  it('should be `small medium` when its width is equal to its smallest size', function () {
     body.style.width = (sizes[1]) + 'px';
     eqjs.refreshNodes();
     eqjs.query(undefined, function () {
       result = elem.getAttribute('data-eq-state');
-      expect(result).toBe('medium');
+      expect(result).toBe('small medium');
     });
   });
 
-  it('should be `medium` when its width is larger to its medium size but smaller than its `larger` size', function () {
+  it('should be `small medium` when its width is larger to its medium size but smaller than its `larger` size', function () {
     body.style.width = (sizes[1] + 1) + 'px';
     eqjs.refreshNodes();
     eqjs.query(undefined, function () {
       result = elem.getAttribute('data-eq-state');
-      expect(result).toBe('medium');
+      expect(result).toBe('small medium');
     });
   });
 
   //////////////////////////////
   // Large Sizes
   //////////////////////////////
-  it('should be `large` when its width is equal to its largest size', function () {
+  it('should be `small medium large` when its width is equal to its largest size', function () {
     body.style.width = (sizes[2]) + 'px';
     eqjs.refreshNodes();
     eqjs.query(undefined, function () {
       result = elem.getAttribute('data-eq-state');
-      expect(result).toBe('large');
+      expect(result).toBe('small medium large');
     });
   });
 
-  it('should be `large` when its width is larger to its largest size', function () {
+  it('should be `small medium large` when its width is larger to its largest size', function () {
     body.style.width = (sizes[2] + 1) + 'px';
     eqjs.refreshNodes();
     eqjs.query(undefined, function () {
       result = elem.getAttribute('data-eq-state');
-      expect(result).toBe('large');
+      expect(result).toBe('small medium large');
     });
   });
 });
