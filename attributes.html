@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Attribute Test</title>
+  <style>
+    .foo[data-eq-state$=large] {
+      background: blue; }
+
+    .foo[data-eq-state$=small] {
+      background: red; }
+
+    .bar[data-eq-state~=medium] {
+      background: green; }
+  </style>
+</head>
+<body>
+
+  <div class="foo" data-eq-state="small medium large">
+    hello world
+  </div>
+
+  <div class="bar" data-eq-state="small medium large">
+    hello world
+  </div>
+
+  <div class="foo" data-eq-state="small">
+    hello world
+  </div>
+
+</body>
+</html>
