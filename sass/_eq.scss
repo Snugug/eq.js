@@ -5,20 +5,30 @@
 $EQ-Selectors: ();
 
 //////////////////////////////
+// Error Mixin
+//////////////////////////////
+@mixin EQSTATECHECK($states, $name) {
+  $EQ-Error: 'You need to include a state for the `#{$name}` mixin!';
+  @if (length($states) == 0) {
+    @if feature-exists(at-error) {
+      @error $EQ-Error;
+    }
+    @else {
+      @warn $EQ-Error;
+    }
+  }
+  @else {
+    @content;
+  }
+}
+
+//////////////////////////////
 // Element Queries!
 //
 // $states - List of states to apply styling to; @include eq(small, medium, large)
 //////////////////////////////
 @mixin eq($states...) {
-  @if (length($states) == 0) {
-    @if feature-exists(at-error) {
-      @error 'You need to include a state for the `eq` mixin';
-    }
-    @else {
-      @warn 'You need to include a state for the `eq` mixin';
-    }
-  }
-  @else {
+  @include EQSTATECHECK('eq', $states) {
     //////////////////////////////
     // Markup based Element Queries
     //////////////////////////////
@@ -29,8 +39,53 @@ $EQ-Selectors: ();
       }
     }
     @each $state in $states {
-      &[data-eq-state="#{$state}"] {
+      &[data-eq-state=$"#{$state}"] {
         @extend %#{$extend};
+      }
+    }
+  }
+}
+
+//////////////////////////////
+// Element Query Stack!
+//
+// Contains one of the query states!
+// $states - List of states to apply styling to; @include eq-contains(small, medium, large)
+//  * Space separated list will be treated like an `and` media query; all of the states must be active
+//  * Comma separated list will be treated like an `or` media query: at least one of the states must be active
+//////////////////////////////
+@mixin eq-contains($states...) {
+  // Space separator API, so going to do stupid magic
+  @if length($states) == 1 {
+    $states: nth($states, 1);
+  }
+
+  @include EQSTATECHECK('eq', $states) {
+    //////////////////////////////
+    // Markup based Element Queries
+    //////////////////////////////
+    $extend: unique-id();
+    @at-root {
+      %#{$extend} {
+        @content;
+      }
+    }
+    @if list-separator($states) == 'space' {
+      $stateApply: '';
+
+      @each $state in $states {
+        $stateApply: $stateApply + '[data-eq-state~="#{$state}"]';
+      }
+
+      &#{$stateApply} {
+        @extend %#{$extend};
+      }
+    }
+    @else {
+      @each $state in $states {
+        &[data-eq-state~="#{$state}"] {
+          @extend %#{$extend};
+        }
       }
     }
   }
