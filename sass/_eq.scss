@@ -39,7 +39,7 @@ $EQ-Selectors: ();
       }
     }
     @each $state in $states {
-      &[data-eq-state=$"#{$state}"] {
+      &[data-eq-state$="#{$state}"] {
         @extend %#{$extend};
       }
     }
