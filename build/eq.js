@@ -120,11 +120,14 @@
    */
   EQjs.prototype.nodeWrites = function (nodes) {
     var i,
+    j,
+    k,
     length,
     callback,
     proto = Object.getPrototypeOf(eqjs),
     widths = proto.widths,
-    points = proto.points;
+    points = proto.points,
+    state = '';
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -139,6 +142,7 @@
       var objWidth = widths[i];
       var obj = nodes[i];
       var eqPts = points[i];
+      var eqStates = [];
 
       // Get keys for states
       var eqPtsLength = eqPts.length;
@@ -149,13 +153,17 @@
       }
       // Be greedy for largest state
       else if (objWidth >= eqPts[eqPtsLength - 1].value) {
-        obj.setAttribute('data-eq-state', eqPts[eqPtsLength - 1].key);
+        for (k = 0; k < eqPtsLength; k++) {
+          eqStates.push(eqPts[k].key);
+        }
+        obj.setAttribute('data-eq-state', eqStates.join(' '));
       }
       // Traverse the states if not found
       else {
-        for (var j = 0; j < eqPtsLength; j++) {
+        for (j = 0; j < eqPtsLength; j++) {
           var current = eqPts[j];
           var next = eqPts[j + 1];
+          eqStates.push(current.key);
 
           if (j === 0 && objWidth < current.value) {
             obj.removeAttribute('data-eq-state');
@@ -163,12 +171,13 @@
           }
 
           if (next.value === undefined) {
-            obj.setAttribute('data-eq-state', next.key);
+            eqStates.push(next.key);
+            obj.setAttribute('data-eq-state', eqStates.join(' '));
             break;
           }
 
           if (objWidth >= current.value && objWidth < next.value) {
-            obj.setAttribute('data-eq-state', current.key);
+            obj.setAttribute('data-eq-state', eqStates.join(' '));
             break;
           }
         }
