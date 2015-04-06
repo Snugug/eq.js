@@ -18,7 +18,9 @@ describe('Set the `data-eq-state` attribute based on element width and its `data
 
     // Remove State and Width
     elem.removeAttribute('data-eq-state');
+    elem.removeEventListener('eqResize');
     body.style.width = '0px';
+
 
 
     // Set new sizes
@@ -100,6 +102,19 @@ describe('Set the `data-eq-state` attribute based on element width and its `data
     eqjs.query(undefined, function () {
       result = elem.getAttribute('data-eq-state');
       expect(result).toBe('small medium large');
+    });
+  });
+
+  //////////////////////////////
+  // Events
+  //////////////////////////////
+  it('should fire an event when the element gets resized', function () {
+    var eventSpy = jasmine.createSpy();
+    body.style.width = (sizes[0]) + 'px';
+    elem.addEventListener('eqResize', eventSpy);
+    eqjs.refreshNodes();
+    eqjs.query(undefined, function () {
+      expect(eventSpy).toHaveBeenCalled();
     });
   });
 });
