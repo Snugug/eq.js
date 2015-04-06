@@ -124,10 +124,10 @@
         k,
         length,
         callback,
+        eqResizeEvent,
         proto = Object.getPrototypeOf(eqjs),
         widths = proto.widths,
-        points = proto.points,
-        eqResizeEvent = new Event('eqResize');
+        points = proto.points;
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -150,6 +150,7 @@
       // Be greedy for smallest state
       if (objWidth < eqPts[0].value) {
         obj.removeAttribute('data-eq-state');
+        eqResizeEvent = new CustomEvent('eqResize', {'detail': null});
       }
       // Be greedy for largest state
       else if (objWidth >= eqPts[eqPtsLength - 1].value) {
@@ -157,6 +158,7 @@
           eqStates.push(eqPts[k].key);
         }
         obj.setAttribute('data-eq-state', eqStates.join(' '));
+        eqResizeEvent = new CustomEvent('eqResize', {'detail': eqStates.join(' ')});
       }
       // Traverse the states if not found
       else {
@@ -167,17 +169,20 @@
 
           if (j === 0 && objWidth < current.value) {
             obj.removeAttribute('data-eq-state');
+            eqResizeEvent = new CustomEvent('eqResize', {'detail': null});
             break;
           }
 
           if (next.value === undefined) {
             eqStates.push(next.key);
             obj.setAttribute('data-eq-state', eqStates.join(' '));
+            eqResizeEvent = new CustomEvent('eqResize', {'detail': eqStates.join(' ')});
             break;
           }
 
           if (objWidth >= current.value && objWidth < next.value) {
             obj.setAttribute('data-eq-state', eqStates.join(' '));
+            eqResizeEvent = new CustomEvent('eqResize', {'detail': eqStates.join(' ')});
             break;
           }
         }
