@@ -120,14 +120,14 @@
    */
   EQjs.prototype.nodeWrites = function (nodes) {
     var i,
-    j,
-    k,
-    length,
-    callback,
-    proto = Object.getPrototypeOf(eqjs),
-    widths = proto.widths,
-    points = proto.points,
-    state = '';
+        j,
+        k,
+        length,
+        callback,
+        proto = Object.getPrototypeOf(eqjs),
+        widths = proto.widths,
+        points = proto.points,
+        eqResizeEvent = new Event('eqResize');
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -182,6 +182,9 @@
           }
         }
       }
+
+      // Fire resize event
+      obj.dispatchEvent(eqResizeEvent);
     }
 
     // Run Callback
