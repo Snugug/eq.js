@@ -56,7 +56,7 @@ Each node that gets queried will also fire an `eqResize` event once **eq.js** ha
 ```javascript
 var myElement = document.getElementById('foo');
 
-foo.addEventListener('eqResize', function (e) {
+myElement.addEventListener('eqResize', function (e) {
   console.log('The current Element Query State is `' + e.details + '`');
 });
 ```
