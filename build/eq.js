@@ -120,14 +120,15 @@
    */
   EQjs.prototype.nodeWrites = function (nodes) {
     var i,
-    j,
-    k,
-    length,
-    callback,
-    proto = Object.getPrototypeOf(eqjs),
-    widths = proto.widths,
-    points = proto.points,
-    state = '';
+        j,
+        k,
+        length,
+        callback,
+        eqResizeEvent,
+        eqState,
+        proto = Object.getPrototypeOf(eqjs),
+        widths = proto.widths,
+        points = proto.points;
 
     if (nodes && typeof(nodes) !== 'number') {
       length = nodes.length;
@@ -149,14 +150,14 @@
 
       // Be greedy for smallest state
       if (objWidth < eqPts[0].value) {
-        obj.removeAttribute('data-eq-state');
+        eqState = null;
       }
       // Be greedy for largest state
       else if (objWidth >= eqPts[eqPtsLength - 1].value) {
         for (k = 0; k < eqPtsLength; k++) {
           eqStates.push(eqPts[k].key);
         }
-        obj.setAttribute('data-eq-state', eqStates.join(' '));
+        eqState = eqStates.join(' ');
       }
       // Traverse the states if not found
       else {
@@ -166,22 +167,33 @@
           eqStates.push(current.key);
 
           if (j === 0 && objWidth < current.value) {
-            obj.removeAttribute('data-eq-state');
+            eqState = null;
             break;
           }
-
-          if (next.value === undefined) {
+          else if (next.value === undefined) {
             eqStates.push(next.key);
-            obj.setAttribute('data-eq-state', eqStates.join(' '));
+            eqState = eqStates.join(' ');
             break;
           }
-
-          if (objWidth >= current.value && objWidth < next.value) {
-            obj.setAttribute('data-eq-state', eqStates.join(' '));
+          else if (objWidth >= current.value && objWidth < next.value) {
+            eqState = eqStates.join(' ');
             break;
           }
         }
       }
+
+      // Determine what to set the attribute to
+      if (eqState === null) {
+        obj.removeAttribute('data-eq-state');
+      }
+      else {
+        obj.setAttribute('data-eq-state', eqState);
+      }
+      // Set the details of `eqResize`
+      eqResizeEvent = new CustomEvent('eqResize', {'detail': eqState});
+
+      // Fire resize event
+      obj.dispatchEvent(eqResizeEvent);
     }
 
     // Run Callback

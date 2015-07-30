@@ -51,6 +51,16 @@ When **eq.js** has determined which state your element is in, it will add an `da
 
 If you dynamically add nodes that you would like to query, you need to trigger **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also takes a callback as an optional second argument that will be fired once all of the nodes have been processed. It will be passed an array of nodes that were worked on.
 
+Each node that gets queried will also fire an `eqResize` event once **eq.js** has worked its magic. This'll allow you to code reactively to what happens! The current value of `data-eq-state` will be available in `event.details`;
+
+```javascript
+var myElement = document.getElementById('foo');
+
+myElement.addEventListener('eqResize', function (e) {
+  console.log('The current Element Query State is `' + e.details + '`');
+});
+```
+
 Alternatively, you can use `eqjs.refreshNodes()` to update the listing of nodes that is use by `eqjs.query()` with all of the nodes currently in the DOM. This is useful when you know that a node has been dynamically added, but you don't have it as an object and can't pass it to `ejs.query()`.
 
 From there, proceed with styling as normal! Because **eq.js** uses attributes, you're going to want to select using attribute selectors. Styling follows the same patters as normal `min-width` media query styling, with styling for the base first, then subsequent styling added on top:
@@ -171,7 +181,7 @@ add_import_path "bower_components/eq.js/sass"
 
 ### A note on IE8/Older Browser Support
 
-There are two files provided: `eq.min.js`, `eq.polyfilled.min.js`, and `polyfills.min.js`. `eq.polyfilled.min.js` includes the polyfills needed to run **eq.js** in older browsers that are missing some newer JavaScript niceties (yes, this includes IE8+) and `polyfills.js` just includes the polyfills. While these allow for a drop-in solutions using just what's provided here, a better solution (and where a bunch of the polyfills come from), consider using something like a [polyfill service](https://github.com/Financial-Times/polyfill-service) for a more robust and well-rounded solution.
+There are two files provided: `eq.min.js`, `eq.polyfilled.min.js`, and `polyfills.min.js`. `eq.polyfilled.min.js` includes the polyfills needed to run **eq.js** in older browsers that are missing some newer JavaScript niceties and `polyfills.js` just includes the polyfills. The polyfills that come bundled will work for browsers IE9+. While these allow for a drop-in solutions using just what's provided here, a better solution (and if you need IE8 support, and where a bunch of the polyfills come from), is to consider using something like a [polyfill service](https://github.com/Financial-Times/polyfill-service) for a more robust and well-rounded solution.
 
 The specific polyfills included are as follows:
 
