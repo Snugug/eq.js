@@ -104,8 +104,8 @@ $EQ-Selectors: ();
     content: '#{str-slice(inspect($states), 2, -2)}';
   }
 
-  @if not index($EQ-Selectors, &) {
-    $EQ-Selectors: append($EQ-Selectors, &, 'comma') !global;
+  @if not index($EQ-Selectors, '#{&}') {
+    $EQ-Selectors: append($EQ-Selectors, '#{&}', 'comma') !global;
   }
 }
 
