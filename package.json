@@ -2,17 +2,22 @@
   "name": "eq.js",
   "version": "1.7.0",
   "description": "Element queries, fast and light",
-  "main": "eq.js",
+  "main": "dist/eq.min.js",
   "keywords": [
     "Element Queries",
     "Responsive Web Design",
     "JavaScript",
     "RWD"
   ],
+   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Snugug/eq.js.git"
+  },
   "scripts": {
     "test": "gulp travis"
   },
-  "author": "Sam Richard",
+  "author": "Sam Richard <sam@snug.ug>",
+  "homepage": "https://github.com/Snugug/eq.js#readme",
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^1.5.8",
