@@ -56,7 +56,7 @@ var polyfills = [
   'CustomEvent',
   'Event.DOMContentLoaded',
   'getComputedStyle',
-  'Array.prototype.forEach'
+  'Array/prototype/forEach'
 ];
 
 var buildPolyfill = function () {
