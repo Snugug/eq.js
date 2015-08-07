@@ -32,15 +32,9 @@ $EQ-Selectors: ();
     //////////////////////////////
     // Markup based Element Queries
     //////////////////////////////
-    $extend: unique-id();
-    @at-root {
-      %#{$extend} {
-        @content;
-      }
-    }
     @each $state in $states {
-      &[data-eq-state$="#{$state}"] {
-        @extend %#{$extend};
+      [data-eq-state$="#{$state}"] & {
+        @content;
       }
     }
   }
@@ -64,12 +58,6 @@ $EQ-Selectors: ();
     //////////////////////////////
     // Markup based Element Queries
     //////////////////////////////
-    $extend: unique-id();
-    @at-root {
-      %#{$extend} {
-        @content;
-      }
-    }
     @if list-separator($states) == 'space' {
       $stateApply: '';
 
@@ -77,14 +65,14 @@ $EQ-Selectors: ();
         $stateApply: $stateApply + '[data-eq-state~="#{$state}"]';
       }
 
-      &#{$stateApply} {
-        @extend %#{$extend};
+      #{$stateApply} & {
+        @content
       }
     }
     @else {
       @each $state in $states {
-        &[data-eq-state~="#{$state}"] {
-          @extend %#{$extend};
+        [data-eq-state~="#{$state}"] & {
+          @content;
         }
       }
     }
