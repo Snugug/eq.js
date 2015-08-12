@@ -117,4 +117,14 @@ describe('Set the `data-eq-state` attribute based on element width and its `data
       expect(eventSpy).toHaveBeenCalled();
     });
   });
+
+  it('should allow events to bubble up through the DOM', function() {
+    var eventSpy = jasmine.createSpy();
+    body.style.width = (sizes[0]) + 'px';
+    body.addEventListener('eqResize', eventSpy);
+    eqjs.refreshNodes();
+    eqjs.query(undefined, function () {
+      expect(eventSpy).toHaveBeenCalled();
+    });
+  });
 });
