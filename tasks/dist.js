@@ -67,7 +67,7 @@ var buildPolyfill = function () {
     var detect = fs.readFileSync(fillPath + poly + '/detect.js', 'utf8'),
         pfill = fs.readFileSync(fillPath + poly + '/polyfill.js', 'utf8');
 
-    fill += 'if (!' + detect + '){' + pfill + '}';
+    fill += 'if (!(' + detect + ')){' + pfill + '}';
   });
 
   fill += '}());'
