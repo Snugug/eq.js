@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.7.1
+**August 12, 2015**
+* **Fix** Polyfills work when polyfill has an `&&` ([#53](https://github.com/Snugug/eq.js/issues/53))
+* **Fix** `eqResize` event now bubbles ([#52](https://github.com/Snugug/eq.js/issues/52))
+
 ## v1.7.0
 **July 30, 2015**
 * **New**  An `eqResize` will fire whenever an object gets resized! Yay!
