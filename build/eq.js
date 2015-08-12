@@ -190,7 +190,7 @@
         obj.setAttribute('data-eq-state', eqState);
       }
       // Set the details of `eqResize`
-      eqResizeEvent = new CustomEvent('eqResize', {'detail': eqState});
+      eqResizeEvent = new CustomEvent('eqResize', {'detail': eqState, 'bubbles': true});
 
       // Fire resize event
       obj.dispatchEvent(eqResizeEvent);
