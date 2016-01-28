@@ -79,7 +79,7 @@
     var widths = [], points = [], i;
 
     for (i = 0; i < length; i++) {
-      widths.push(nodes[i].offsetWidth);
+      widths.push(nodes[i].getBoundingClientRect().width);
       try {
         points.push(proto.sortObj(nodes[i].getAttribute('data-eq-pts')));
       }
