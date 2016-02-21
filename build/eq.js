@@ -245,6 +245,24 @@
     return arr.sort(function (a, b) { return a.value - b.value; });
   };
 
+  /**
+    * JavaScript constructor
+    * Adds `data-eq-pts` attribute as constructor for JavaScript
+    */
+  EQjs.prototype.definePts = function (node, points) {
+    points = points ? points : {};
+
+    points = JSON.stringify(points);
+    points = points.substring(1, points.length - 1);
+    points = points.replace(/:/g, ': ');
+    points = points.replace(/,/g, ', ');
+    points = points.replace(/"/g, '');
+
+    node.setAttribute('data-eq-pts', points);
+
+    return points;
+  };
+
   /*
    * We only ever want there to be
    * one instance of EQjs in an app

@@ -29,6 +29,19 @@ With the first method, the value of `data-eq-pts` should be each pair and should
 </div>
 ```
 
+You can add this attribute via JavaScript if you would like in the following way:
+
+```javascript
+var component = document.querySelector('.component');
+eqjs.definePts(component, {
+  small: 400,
+  medium: 600,
+  large: 900
+});
+```
+
+If you use the JavaScript method, you can only pass in a single DOM element at a time. It will return the string for `data-eq-pts` and add the `data-eq-pts` attribute to the element.
+
 Similarly, with the second method, the `eq-pts` mixin is called with a map of your pairs. It is important not to quote your keys in the Sass map, or wonky things may happen in the parsing. At the bottom of your stylesheet, after all of your `eq-pts` have been called, you also need to call the `eq-selectors` mixin in order to write out the hook for **eq.js**.
 
 ```scss
