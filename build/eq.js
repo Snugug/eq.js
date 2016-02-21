@@ -170,7 +170,7 @@
             eqState = null;
             break;
           }
-          else if (next.value === undefined) {
+          else if (next  === undefined || next.value === undefined) {
             eqStates.push(next.key);
             eqState = eqStates.join(' ');
             break;
