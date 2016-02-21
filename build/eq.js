@@ -283,7 +283,7 @@
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = eqjs;
   } else if (typeof define === 'function' && define.amd) {
-    define(function () {
+    define('eqjs', function () {
       return eqjs;
     });
   } else {
