@@ -1,6 +1,6 @@
 {
   "name": "eq.js",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "Element queries, fast and light",
   "main": "dist/eq.min.js",
   "keywords": [
@@ -9,7 +9,7 @@
     "JavaScript",
     "RWD"
   ],
-   "repository": {
+  "repository": {
     "type": "git",
     "url": "git+https://github.com/Snugug/eq.js.git"
   },
