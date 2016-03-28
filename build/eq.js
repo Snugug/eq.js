@@ -79,7 +79,12 @@
     var widths = [], points = [], i;
 
     for (i = 0; i < length; i++) {
-      widths.push(nodes[i].offsetWidth);
+      var rect = nodes[i].getBoundingClientRect();
+      var width = rect.width;
+      if (width === undefined) {
+          width = rect.right - rect.left;
+      }
+      widths.push(width);
       try {
         points.push(proto.sortObj(nodes[i].getAttribute('data-eq-pts')));
       }
@@ -170,7 +175,7 @@
             eqState = null;
             break;
           }
-          else if (next  === undefined || next.value === undefined) {
+          else if (next !== undefined && next.value === undefined) {
             eqStates.push(next.key);
             eqState = eqStates.join(' ');
             break;
