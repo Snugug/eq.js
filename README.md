@@ -62,7 +62,7 @@ When **eq.js** has determined which state your element is in, it will add an `da
 
 **eq.js** also adds `window.eqjs` to allow you to utilize **eq.js** in your own function calls. It will handle your `DOMContentLoaded` and `load` events as well as all `resize` events, inspecting your DOM to determine what nodes need to be queried each time.
 
-If you dynamically add nodes that you would like to query, you need to trigger **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes)`, and **eq.js** will work its magic. `eqjs.query()` also takes a callback as an optional second argument that will be fired once all of the nodes have been processed. It will be passed an array of nodes that were worked on.
+If you dynamically add nodes that you would like to query, you need to trigger **eq.js** yourself. This is easy though! Just load up your nodes into an array or a NodeList and pass that to `eqjs.query(nodes[, cb])`, and **eq.js** will work its magic. `eqjs.query()` also takes a callback as an optional second argument that will be fired once all of the nodes have been processed. It will be passed an array of nodes that were worked on. You can also call `eqjs.all([cb])` to run **eq.js** against all nodes in the DOM (with an optional `cb` callback).
 
 Each node that gets queried will also fire an `eqResize` event once **eq.js** has worked its magic. This'll allow you to code reactively to what happens! The current value of `data-eq-state` will be available in `event.details`;
 

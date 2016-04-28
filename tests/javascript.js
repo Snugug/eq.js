@@ -137,4 +137,15 @@ describe('Set the `data-eq-pts` attribute via JavaScript', function () {
       expect(eventSpy).toHaveBeenCalled();
     });
   });
+
+  //////////////////////////////
+  // All Query
+  //////////////////////////////
+  it('should query properly with `all` query', function () {
+    body.style.width = (sizes[2]) + 'px';
+    eqjs.all(function () {
+      result = elem.getAttribute('data-eq-state');
+      expect(result).toBe('small medium large');
+    });
+  });
 });

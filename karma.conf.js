@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'bower_components/polyfill-service/polyfills/requestAnimationFrame/polyfill.js',
       'bower_components/polyfill-service/polyfills/CustomEvent/polyfill.js',
       'build/**/*.js',
       'tests/**/*.js'

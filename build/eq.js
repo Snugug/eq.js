@@ -268,6 +268,24 @@
     return points;
   };
 
+  /**
+    * Query All Nodes
+    * Runs refreshNodes and Query
+  **/
+  EQjs.prototype.all = function (cb) {
+    var proto = Object.getPrototypeOf(eqjs);
+    var hasCB = cb ? true : false;
+
+    proto.refreshNodes();
+
+    if (!hasCB) {
+      window.requestAnimationFrame(proto.query);
+    }
+    else {
+      proto.query(undefined, cb);
+    }
+  }
+
   /*
    * We only ever want there to be
    * one instance of EQjs in an app
@@ -280,16 +298,14 @@
    * Fires on document load; for HTML based EQs
    */
   addEvent(window, 'DOMContentLoaded', function () {
-    eqjs.refreshNodes();
-    eqjs.query(undefined, true);
+    eqjs.all(false);
   });
 
   /*
    * Window Loaded
    */
   addEvent(window, 'load', function () {
-    eqjs.refreshNodes();
-    eqjs.query(undefined, true);
+    eqjs.all(true);
   });
 
   /*
@@ -298,8 +314,7 @@
    * Loop over each `eq-pts` element and pass to eqState
    */
   addEvent(window, 'resize', function () {
-    eqjs.refreshNodes();
-    window.requestAnimationFrame(eqjs.query);
+    eqjs.all(true);
   });
 
   // Expose 'eqjs'
