@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.9.0
+**April 27, 2016**
+* Add `eqjs.all([cb])` as a helper function that wraps `eqjs.refreshNodes()` and `eqjs.query()`
+
+## v1.8.0
+**February 21, 2016**
+* Add JavaScript constructor (`eqjs.definePts(component, points)`) for defining points via JavaScript
+
 ## v1.7.1
 **August 12, 2015**
 * **Fix** Polyfills work when polyfill has an `&&` ([#53](https://github.com/Snugug/eq.js/issues/53))
