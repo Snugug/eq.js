@@ -37,7 +37,7 @@
     "karma-coverage": "^0.2.6",
     "karma-coveralls": "^0.1.4",
     "karma-jasmine": "^0.1.5",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-phantomjs-launcher": "^1.0.2",
     "karma-spec-reporter": "0.0.13",
     "run-sequence": "^1.0.2",
     "stream": "0.0.2"
