@@ -20,7 +20,7 @@
   "homepage": "https://github.com/Snugug/eq.js#readme",
   "license": "MIT",
   "devDependencies": {
-    "browser-sync": "^1.5.8",
+    "browser-sync": "^2.17.0",
     "compass-options": "^0.1.1",
     "gulp": "^3.8.8",
     "gulp-concat": "^2.4.1",
