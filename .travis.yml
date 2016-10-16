@@ -5,4 +5,3 @@ before_install:
   - npm install -g yarn
 install:
   - yarn
-script: yarn test
