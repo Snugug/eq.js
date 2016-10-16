@@ -9,31 +9,34 @@
  * eqjs.query - Runs through all nodes and finds their widths and points
  * eqjs.nodeWrites - Runs through all nodes and writes their eq status
  */
-(function (eqjs) {
+(function (EQJS) {
   'use strict';
 
-  function EQjs() {
+  var eqjs;
+
+  var EQjs = function () { // eslint-disable-line one-var
     this.nodes = [];
     this.eqsLength = 0;
     this.widths = [];
     this.points = [];
     this.callback = undefined;
-  }
+  };
 
   /*
    * Add event (cross browser)
    * From http://stackoverflow.com/a/10150042
    */
-  function addEvent(elem, event, fn) {
+  var addEvent = function (elem, event, fn) { // eslint-disable-line one-var
     if (elem.addEventListener) {
       elem.addEventListener(event, fn, false);
-    } else {
+    }
+    else {
       elem.attachEvent('on' + event, function () {
         // set the this pointer same as addEventListener when fn is called
         return (fn.call(elem, window.event));
       });
     }
-  }
+  };
 
   /*
    * Parse Before
@@ -41,16 +44,16 @@
    * Reads `:before` content and splits it at the comma
    * From http://jsbin.com/ramiguzefiji/1/edit?html,css,js,output
    */
-  function parseBefore(elem) {
+  var parseBefore = function (elem) { // eslint-disable-line one-var
     return window.getComputedStyle(elem, ':before').getPropertyValue('content').slice(1, -1);
-  }
+  };
 
   /*
    * Merges two node lists together.
    *
    * From http://stackoverflow.com/questions/914783/javascript-nodelist/17262552#17262552
    */
-  var mergeNodes = function(a, b) {
+  var mergeNodes = function (a, b) { // eslint-disable-line one-var
     return [].slice.call(a).concat([].slice.call(b));
   };
 
@@ -61,28 +64,37 @@
    *  nodes - optional, an array or NodeList of nodes to query
    *  callback - Either boolean (`true`/`false`) to force a normal callback, or a function to use as a callback once query and nodeWrites have finished.
    */
-  EQjs.prototype.query = function (nodes, callback) {
-    var proto = Object.getPrototypeOf(eqjs);
-    var length;
+  EQjs.prototype.query = function (n, callback) {
+    var nodes = n,
+        proto = Object.getPrototypeOf(eqjs),
+        length,
+        widths,
+        points,
+        rect,
+        width,
+        i;
 
-    if (callback && typeof(callback) === 'function') {
+    if (callback && typeof (callback) === 'function') {
       proto.callback = callback;
     }
 
-    if (nodes && typeof(nodes) !== 'number') {
+    if (nodes && typeof (nodes) !== 'number') {
       length = nodes.length;
     }
     else {
       nodes = proto.nodes;
       length = proto.nodesLength;
     }
-    var widths = [], points = [], i;
+
+    widths = [];
+    points = [];
 
     for (i = 0; i < length; i++) {
-      var rect = nodes[i].getBoundingClientRect();
-      var width = rect.width;
+      rect = nodes[i].getBoundingClientRect();
+      width = rect.width;
+
       if (width === undefined) {
-          width = rect.right - rect.left;
+        width = rect.right - rect.left;
       }
       widths.push(width);
       try {
@@ -95,7 +107,7 @@
         catch (e2) {
           points.push([{
             key: '',
-            value: 0
+            value: 0,
           }]);
         }
       }
@@ -104,10 +116,10 @@
     proto.widths = widths;
     proto.points = points;
 
-    if (nodes && typeof(nodes) !== 'number') {
+    if (nodes && typeof (nodes) !== 'number') {
       proto.nodeWrites(nodes, widths, points);
     }
-    else if (callback && typeof(callback) !== 'function') {
+    else if (callback && typeof (callback) !== 'function') {
       proto.nodeWrites();
     }
     else {
@@ -123,8 +135,9 @@
    *  widths - optional, widths of nodes to use. Only used if `nodes` is passed in
    *  points - optional, points of nodes to use. Only used if `nodes` is passed in
    */
-  EQjs.prototype.nodeWrites = function (nodes) {
-    var i,
+  EQjs.prototype.nodeWrites = function (n) {
+    var nodes = n,
+        i,
         j,
         k,
         length,
@@ -133,9 +146,16 @@
         eqState,
         proto = Object.getPrototypeOf(eqjs),
         widths = proto.widths,
-        points = proto.points;
+        points = proto.points,
+        objWidth,
+        obj,
+        eqPts,
+        eqStates,
+        eqPtsLength,
+        current,
+        next;
 
-    if (nodes && typeof(nodes) !== 'number') {
+    if (nodes && typeof (nodes) !== 'number') {
       length = nodes.length;
     }
     else {
@@ -145,18 +165,19 @@
 
     for (i = 0; i < length; i++) {
       // Set object width to found width
-      var objWidth = widths[i];
-      var obj = nodes[i];
-      var eqPts = points[i];
-      var eqStates = [];
+      objWidth = widths[i];
+      obj = nodes[i];
+      eqPts = points[i];
+      eqStates = [];
 
       // Get keys for states
-      var eqPtsLength = eqPts.length;
+      eqPtsLength = eqPts.length;
 
       // Be greedy for smallest state
       if (objWidth < eqPts[0].value) {
         eqState = null;
       }
+
       // Be greedy for largest state
       else if (objWidth >= eqPts[eqPtsLength - 1].value) {
         for (k = 0; k < eqPtsLength; k++) {
@@ -164,11 +185,13 @@
         }
         eqState = eqStates.join(' ');
       }
+
       // Traverse the states if not found
       else {
         for (j = 0; j < eqPtsLength; j++) {
-          var current = eqPts[j];
-          var next = eqPts[j + 1];
+          current = eqPts[j];
+          next = eqPts[j + 1];
+
           eqStates.push(current.key);
 
           if (j === 0 && objWidth < current.value) {
@@ -194,8 +217,12 @@
       else {
         obj.setAttribute('data-eq-state', eqState);
       }
+
       // Set the details of `eqResize`
-      eqResizeEvent = new CustomEvent('eqResize', {'detail': eqState, 'bubbles': true});
+      eqResizeEvent = new CustomEvent('eqResize', {
+        'detail': eqState,
+        'bubbles': true,
+      });
 
       // Fire resize event
       obj.dispatchEvent(eqResizeEvent);
@@ -235,27 +262,35 @@
    * Sorts a simple object (key: value) by value and returns a sorted object
    */
   EQjs.prototype.sortObj = function (obj) {
-    var arr = [];
+    var arr = [],
+        objSplit = obj.split(','),
+        i,
+        sSplit;
 
-    var objSplit = obj.split(',');
-
-    for (var i = 0; i < objSplit.length; i++) {
-      var sSplit = objSplit[i].split(':');
+    for (i = 0; i < objSplit.length; i++) {
+      sSplit = objSplit[i].split(':');
       arr.push({
         'key': sSplit[0].replace(/^\s+|\s+$/g, ''),
-        'value': parseFloat(sSplit[1])
+        'value': parseFloat(sSplit[1]),
       });
     }
 
-    return arr.sort(function (a, b) { return a.value - b.value; });
+    return arr.sort(function (a, b) {
+      return a.value - b.value;
+    });
   };
 
   /**
     * JavaScript constructor
     * Adds `data-eq-pts` attribute as constructor for JavaScript
+    *
+    * @param {object} node - Node being worked on
+    * @param {object} pts - Points that need to be set
+    *
+    * @returns {string} - String of points for the node
     */
-  EQjs.prototype.definePts = function (node, points) {
-    points = points ? points : {};
+  EQjs.prototype.definePts = function (node, pts) {
+    var points = pts || {};
 
     points = JSON.stringify(points);
     points = points.substring(1, points.length - 1);
@@ -271,10 +306,12 @@
   /**
     * Query All Nodes
     * Runs refreshNodes and Query
+    *
+    * @param {function} cb - Callback function
   **/
   EQjs.prototype.all = function (cb) {
-    var proto = Object.getPrototypeOf(eqjs);
-    var hasCB = cb ? true : false;
+    var proto = Object.getPrototypeOf(eqjs),
+        hasCB = cb || false;
 
     proto.refreshNodes();
 
@@ -284,13 +321,13 @@
     else {
       proto.query(undefined, cb);
     }
-  }
+  };
 
   /*
    * We only ever want there to be
    * one instance of EQjs in an app
    */
-  eqjs = eqjs || new EQjs();
+  eqjs = EQJS || new EQjs();
 
   /*
    * Document Loaded
@@ -318,13 +355,15 @@
   });
 
   // Expose 'eqjs'
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = eqjs;
-  } else if (typeof define === 'function' && define.amd) {
-    define('eqjs', function () {
+  if (typeof module !== 'undefined' && module.exports) { // eslint-disable-line no-undef
+    module.exports = eqjs; // eslint-disable-line no-undef
+  }
+  else if (typeof define === 'function' && define.amd) { // eslint-disable-line no-undef
+    define('eqjs', function () { // eslint-disable-line no-undef
       return eqjs;
     });
-  } else {
+  }
+  else {
     window.eqjs = eqjs;
   }
-})(window.eqjs);
+}(window.eqjs));
