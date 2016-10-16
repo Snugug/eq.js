@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - "0.10"
+  - "6"
 before_install:
-  - npm install -g gulp bower
-  - bower install -f
+  - npm install -g yarn
+install:
+  - yarn
