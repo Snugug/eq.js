@@ -50,18 +50,18 @@ function string_src(filename, string) {
 // Polyfills
 //////////////////////////////
 var polyfills = [
-  'Object.getPrototypeOf',
+  'Object/getPrototypeOf',
   'requestAnimationFrame',
   'Event',
   'CustomEvent',
-  'Event.DOMContentLoaded',
+  'Event/DOMContentLoaded',
   'getComputedStyle',
-  'Array/prototype/forEach'
+  'Array/prototype/forEach',
 ];
 
 var buildPolyfill = function () {
   var fill = '(function () {',
-      fillPath = './bower_components/polyfill-service/polyfills/';
+      fillPath = './node_modules/polyfill-service/polyfills/';
 
   polyfills.forEach(function (poly) {
     var detect = fs.readFileSync(fillPath + poly + '/detect.js', 'utf8'),
