@@ -14,6 +14,8 @@
     "url": "git+https://github.com/Snugug/eq.js.git"
   },
   "scripts": {
+    "lint": "eslint build",
+    "pretest": "npm run lint",
     "test": "gulp travis"
   },
   "author": "Sam Richard <sam@snug.ug>",
