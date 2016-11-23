@@ -339,6 +339,14 @@
   });
 
   /*
+   * DOM changed
+   */
+  addEvent(window, 'DOMSubtreeModified', function () {
+    eqjs.refreshNodes();
+    eqjs.query(undefined, true);
+  });
+
+  /*
    * Window Loaded
    */
   addEvent(window, 'load', function () {
